@@ -92,8 +92,6 @@ func Setup() {
 	queries = make(chan dbQuery, 16)
 	actions = make(chan dbQuery, 16)
 
-	Users = make(map[string]*User)
-
 	reSanatizeDatabase = regexp.MustCompile(`(\n, \r, \, ', ")`)
 	reIsName = regexp.MustCompile(`[a-zA-Z][a-zA-Z0-9_-]*`)
 }

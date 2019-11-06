@@ -33,26 +33,30 @@ func serveHome(w http.ResponseWriter, r *http.Request) {
 	//http.ServeFile(w, r, "src/Networking/home.html")
 }
 
-func handleImg(imgName string) {
-	http.HandleFunc(imgName, func(w http.ResponseWriter, r *http.Request) {
+func handleImgs(imgNames ...string) {
+	for _, imgName := range imgNames {
+		http.HandleFunc(imgName, func(w http.ResponseWriter, r *http.Request) {
 
-		log.Printf(" networking.web.handleImg:%s", r.URL.String())
-		if r.Method != GET {
-			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-			return
-		}
-		http.ServeFile(w, r, "src/www/assets/imgs"+r.URL.String())
-	})
+			log.Printf(" networking.web.handleImg:%s", r.URL.String())
+			if r.Method != GET {
+				http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+				return
+			}
+			http.ServeFile(w, r, "src/www/assets/imgs"+r.URL.String())
+		})
+	}
 }
-func handleJs(libName string) {
-	http.HandleFunc(libName, func(w http.ResponseWriter, r *http.Request) {
-		log.Printf(" networking.web.handleJs:%s", r.URL.String())
-		if r.Method != GET {
-			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-			return
-		}
-		http.ServeFile(w, r, "src/www/js"+r.URL.String())
-	})
+func handleJs(libNames ...string) {
+	for _, libName := range libNames {
+		http.HandleFunc(libName, func(w http.ResponseWriter, r *http.Request) {
+			log.Printf(" networking.web.handleJs:%s", r.URL.String())
+			if r.Method != GET {
+				http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+				return
+			}
+			http.ServeFile(w, r, "src/www/js"+r.URL.String())
+		})
+	}
 }
 
 var onClose func()
@@ -105,10 +109,8 @@ func StartWebClient(toClose chan bool) {
 		}
 		http.ServeFile(w, r, "src/www/lib/forge-sha256-master/build/forge-sha256.min.js")
 	})
-	handleJs("/login.js")
-	handleImg("/Pending.jpg")
-	handleImg("/Fail.jpg")
-	handleImg("/Success.jpg")
+	handleJs("/login.js", "/messaging.js")
+	handleImgs("/Pending.jpg", "/Fail.jpg", "/Success.jpg")
 
 	srv := &http.Server{Addr: ":8080"}
 	events.GoFuncEvent("Networking.ListenAndServe", func() {
@@ -122,7 +124,7 @@ func StartWebClient(toClose chan bool) {
 		}
 	}
 	go func() {
-		time.Sleep(24 * time.Hour)
+		time.Sleep(72 * time.Hour)
 		close(Shutdown)
 	}()
 }
