@@ -177,7 +177,7 @@ func DeleteUser(name string) <-chan bool {
 		actions <- &DBActionResponse{
 			exec: "Pwds_Remove",
 			args: []interface{}{id},
-			chl:  responseRemoveUserActivty,
+			chl:  responseRemovePwd,
 		}
 		<-responseRemoveUserActivty
 		<-responseRemovePwd
