@@ -1,12 +1,13 @@
 package databasing
 
 import (
-	"Events"
 	"log"
 	"strings"
+
+	"../events"
 )
 
-var adminCommands map[string]Events.Event
+var adminCommands map[string]events.Event
 var adminArgs []string
 
 func makeAdminFunc(argCount uint16, f func(...string)) func() {
@@ -30,11 +31,11 @@ func makeAdminFunc(argCount uint16, f func(...string)) func() {
 }
 func SetupAdminCommands() {
 	if adminCommands == nil {
-		adminCommands = make(map[string]Events.Event)
-		//adminCommands["exit"] = &Events.Function{Name: "Admin!Exit", Function: func() { Shutdown <- true }}
-		adminCommands["addMember"] = &Events.Function{Name: "Admin!AddMember_Full", Function: makeAdminFunc(2,
+		adminCommands = make(map[string]events.Event)
+		//adminCommands["exit"] = &events.Function{Name: "Admin!Exit", Function: func() { Shutdown <- true }}
+		adminCommands["addMember"] = &events.Function{Name: "Admin!AddMember_Full", Function: makeAdminFunc(2,
 			func(args ...string) { InsertUser(args[0], args[1]) })}
-		adminCommands["removeMember"] = &Events.Function{Name: "Admin!RemoveMember", Function: makeAdminFunc(1,
+		adminCommands["removeMember"] = &events.Function{Name: "Admin!RemoveMember", Function: makeAdminFunc(1,
 			func(args ...string) { RequestAction("Members", "Remove", args[0]) })}
 	}
 }
@@ -45,7 +46,7 @@ func HandleAdminCommand(msg string) bool {
 		if command := adminCommands[msg]; command == nil {
 			return false
 		} else {
-			Events.HandleEvent(command)
+			events.HandleEvent(command)
 			return true
 		}
 	} else {
@@ -53,7 +54,7 @@ func HandleAdminCommand(msg string) bool {
 			return false
 		} else {
 			adminArgs = splice[1:]
-			Events.HandleEvent(command)
+			events.HandleEvent(command)
 			return true
 		}
 	}
