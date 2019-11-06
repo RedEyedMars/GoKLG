@@ -1,12 +1,12 @@
 package databasing
 
 import (
-	"Events"
-	"Logger"
 	"database/sql"
 	"fmt"
 	"log"
 	"regexp"
+
+	"../events"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -52,12 +52,12 @@ type DBQueryResponse struct {
 
 func (r *DBActionResponse) execute() {
 	if result, err := dbQueries[r.exec].Exec(r.args...); err != nil {
-		Logger.Error <- Logger.ErrMsg{Err: err, Status: "databasing.query.action." + r.exec}
+		log.Fatalf("databasing.query.action.%s : caused %s", r.exec, err)
 	} else {
 		if _, err := result.RowsAffected(); err != nil {
-			Logger.Error <- Logger.ErrMsg{Err: err, Status: "databasing.query.action." + r.exec}
+			log.Fatalf("databasing.query.action.%s : caused %s", r.exec, err)
 		} else {
-			Events.FuncEvent("databasing.query.action."+r.exec, func() {
+			events.FuncEvent("databasing.query.action."+r.exec, func() {
 				r.chl <- true
 				close(r.chl)
 			})
@@ -67,9 +67,9 @@ func (r *DBActionResponse) execute() {
 }
 func (r *DBQueryResponse) execute() {
 	if rows, err := dbQueries[r.query].Query(r.args...); err != nil {
-		Logger.Error <- Logger.ErrMsg{Err: err, Status: "databasing.query.request." + r.query}
+		log.Fatalf("databasing.query.query.%s : caused %s", r.query, err)
 	} else {
-		Events.FuncEvent("databasing.query.request."+r.query, func() {
+		events.FuncEvent("databasing.query.request."+r.query, func() {
 			for rows.Next() {
 				r.sender.send(rows)
 			}
@@ -100,16 +100,17 @@ func Setup() {
 }
 func defineQuery(db *sql.DB, name string, query string) {
 	if stmt, err := db.Prepare(query); err != nil {
-		Logger.Error <- Logger.ErrMsg{Err: err, Status: "databasing.defineQuery: Failed to define:" + name}
+
+		log.Fatalf("databasing.defineQuery: Failed to define:%s because: %s", name, err)
 	} else {
 		dbQueries[name] = stmt
 	}
 }
 func Run(Shutdown chan bool) {
-	Logger.Verbose <- Logger.Msg{"Setting up database..."}
-	Events.GoFuncEvent("databasing.Run", func() {
-		Events.FuncEvent("databasing.Setup", Setup)
-		Events.FuncEvent("databasing.StartDatabase", func() { StartDatabase(Shutdown) })
+	log.Printf(" databasing.Run: Setting up database...")
+	events.GoFuncEvent("databasing.Run", func() {
+		events.FuncEvent("databasing.Setup", Setup)
+		events.FuncEvent("databasing.StartDatabase", func() { StartDatabase(Shutdown) })
 	})
 }
 
@@ -132,15 +133,13 @@ func StartDatabase(Shutdown chan bool) {
 		}
 
 		onClose = func() {
-			Logger.Verbose <- Logger.Msg{"Closing database..."}
+			log.Printf("Closing database...")
 			db.Close()
 		}
 
-		Events.FuncEvent("databasing.SetupUsers", func() { SetupUsers(db) })
+		events.FuncEvent("databasing.SetupUsers", func() { SetupUsers(db) })
 
-		Events.GoFuncEvent("databasing.LoadAllUsers", func() { LoadAllUsers() })
-
-		Events.FuncEvent("databasing.StartMessageListening", func() { StartMessageListening(db) })
+		events.FuncEvent("databasing.StartMessageListening", func() { StartMessageListening(db) })
 
 	}
 
@@ -149,7 +148,7 @@ func StartDatabase(Shutdown chan bool) {
 var onClose func()
 
 func End() {
-	Events.FuncEvent("Databasing.End", func() {
+	events.FuncEvent("Databasing.End", func() {
 		if onClose != nil {
 			onClose()
 		}

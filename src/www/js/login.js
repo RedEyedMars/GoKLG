@@ -35,19 +35,10 @@ function login(username_val){
   username = document.getElementById("displayusername");
   username.innerHTML = username_val;
 
-  conn.send("{collect_channels}");
-  conn.send("{collect_friends}");
-  conn.send("{collect_resources}");
-
-
 }
 function logout(){
   document.getElementById("popup").style.display = "block";
   document.getElementById("chat_div").style.display = "none";
-
-  while (channel_titles.firstChild) {
-    channel_titles.removeChild(channel_titles.firstChild);
-  }
 
 }
 function signin_() {
@@ -82,11 +73,11 @@ function appendSigninStatus(val){
   status.appendChild(item);
 };
 
-commands["login_successful"] = function(msg,chl,user) {
+commands["login_successful"] = function(msg,user) {
 
   login(user);
 };
-commands["login_failed"] = function(msg,chl,user){
+commands["login_failed"] = function(msg,user){
   const status = document.getElementById("account_signin_status");
   while (status.firstChild) {
     status.removeChild(status.firstChild);
@@ -95,12 +86,12 @@ commands["login_failed"] = function(msg,chl,user){
   item.innerHTML = createTextLinks_(msg);
   status.appendChild(item);
 };
-commands["signup_successful"] = function(msg,chl,user){
+commands["signup_successful"] = function(msg,user){
   login(user);
 };
-commands["signup_failed"] = function(msg,chl,user){
+commands["signup_failed"] = function(msg,user){
   appendSigninStatus(msg)
 };
-commands["logout_successful"] = function(msg,chl,user){
+commands["logout_successful"] = function(msg,user){
   logout();
 };

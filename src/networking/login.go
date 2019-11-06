@@ -1,17 +1,18 @@
 package networking
 
 import (
-	"Events"
 	"crypto/sha256"
-	"databasing"
 	"fmt"
 	"log"
 	"strings"
+
+	"../databasing"
+	"../events"
 )
 
 func setupLoginCommands(registry *ClientRegistry) {
 
-	commands["attempt_login"] = func(c *Client, msg []byte, cln []byte, user []byte) {
+	commands["attempt_login"] = func(c *Client, msg []byte, user []byte) {
 		hash := sha256.New()
 		hash.Write([]byte(adminPassword))
 		hash.Write(msg)
@@ -25,7 +26,7 @@ func setupLoginCommands(registry *ClientRegistry) {
 			log.Printf(" networking.attempt_login.Login failed")
 		}
 	}
-	commands["attempt_signup"] = func(c *Client, msg []byte, cln []byte, user []byte) {
+	commands["attempt_signup"] = func(c *Client, msg []byte, user []byte) {
 		split := strings.Split(string(msg), ",")
 		username, pwd := split[0], split[1]
 		if member := <-databasing.RequestUser("ByName", username); member != nil {
@@ -39,7 +40,7 @@ func setupLoginCommands(registry *ClientRegistry) {
 			pwdAsString := fmt.Sprintf("%x", hash.Sum(nil)[:])
 			if member := <-databasing.RequestUser("ByPwd", pwdAsString); member == nil {
 				member := databasing.NewUserFull(username)
-				Events.GoFuncEvent("client.Signup.AddUser", func() {
+				events.GoFuncEvent("client.Signup.AddUser", func() {
 					databasing.RequestAction("Users", "Add", member, pwdAsString)
 				})
 				c.name = member.Name
@@ -53,7 +54,7 @@ func setupLoginCommands(registry *ClientRegistry) {
 		}
 	}
 
-	commands["attempt_logout"] = func(c *Client, msg []byte, chl []byte, user []byte) {
+	commands["attempt_logout"] = func(c *Client, msg []byte, user []byte) {
 		c.send <- []byte("{logout_successful}")
 		c.name = "_none_"
 	}

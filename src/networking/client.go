@@ -1,13 +1,13 @@
 package networking
 
 import (
-	"Events"
-	"Logger"
 	"bytes"
 	"databasing"
 	"log"
 	"net/http"
 	"time"
+
+	"../events"
 
 	"github.com/gorilla/websocket"
 )
@@ -57,7 +57,7 @@ type Client struct {
 }
 
 func newClient(conn *websocket.Conn) *Client {
-	ip, port := GetIPFromAddress(conn.RemoteAddr().String())
+	ip, port := getIPFromAddress(conn.RemoteAddr().String())
 	return &Client{
 		conn:     conn,
 		ip:       ip,
@@ -144,7 +144,7 @@ func (c *Client) writeMessages() {
 func serveWs(registry *ClientRegistry, w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		Logger.Warning <- Logger.Msg{err.Error(), "networking.serveWs"}
+		log.Printf(" networking.serveWs: %s", err.Error())
 		return
 	}
 	client := newClient(conn)
@@ -152,9 +152,9 @@ func serveWs(registry *ClientRegistry, w http.ResponseWriter, r *http.Request) {
 
 	// Allow collection of memory referenced by the caller by doing all work in
 	// new goroutines.
-	Events.GoFuncEvent("networking.WriteMessages", client.writeMessages)
-	Events.GoFuncEvent("networking.ReadMessages", func() { client.readMessages(registry) })
-	Events.GoFuncEvent("networking.HandleMesssages", func() { client.handleMessages(registry) })
+	events.GoFuncEvent("networking.WriteMessages", client.writeMessages)
+	events.GoFuncEvent("networking.ReadMessages", func() { client.readMessages(registry) })
+	events.GoFuncEvent("networking.HandleMesssages", func() { client.handleMessages(registry) })
 }
 
 const (
@@ -166,24 +166,24 @@ const (
 )
 
 var mode = client
-var adminCommands map[string]Events.Event
+var adminCommands map[string]events.Event
 var adminArgs []string
-var commands map[string]func(*Client, []byte, []byte, []byte)
+var commands map[string]func(*Client, []byte, []byte)
 
 func setupClientCommands(registry *ClientRegistry) {
-	commands = make(map[string]func(*Client, []byte, []byte, []byte))
-	commands["new_connection"] = func(c *Client, msg []byte, chl []byte, user []byte) {}
+	commands = make(map[string]func(*Client, []byte, []byte))
+	commands["new_connection"] = func(c *Client, msg []byte, user []byte) {}
 	setupLoginCommands(registry)
 }
 
 func (c *Client) handleMessages(registry *ClientRegistry) {
 	for message := range c.handle {
 
-		Events.FuncEvent("networking.client.handleMessages.Receive"+string(message), func() {
-			command, msg, chl, user := DifferentiateMessage(message)
+		events.FuncEvent("networking.client.handleMessages.Receive"+string(message), func() {
+			command, msg, user := DifferentiateMessage(message)
 			if cmd, ok := commands[command]; ok {
-				Events.GoFuncEvent("client."+command, func() {
-					cmd(c, msg, chl, user)
+				events.GoFuncEvent("client."+command, func() {
+					cmd(c, msg, user)
 				})
 			} else {
 				log.Printf("networking.client.handleMessages: Command not found: %s", command)

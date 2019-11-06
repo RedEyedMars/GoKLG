@@ -1,9 +1,10 @@
 package databasing
 
 import (
-	"Events"
-	"Logger"
 	"database/sql"
+	"log"
+
+	"../events"
 )
 
 /**
@@ -28,13 +29,6 @@ channels_names
 
 var Users map[string]*User
 
-func LoadAllUsers() {
-
-	for member := range RequestUser("All") {
-		Events.FuncEvent("databasing.members.AddUserToMap", func() { AddUserToMaps(member) })
-	}
-}
-
 type User struct {
 	Name string
 }
@@ -54,11 +48,10 @@ func (mr *DBUserResponse) close() {
 func NewUserFull(name string) *User {
 	member := &User{
 		Name: name}
-	Events.FuncEvent("databasing.members.AddUserToMap", func() { AddUserToMaps(member) })
+	events.FuncEvent("databasing.members.AddUserToMap:"+name, func() { AddUserToMaps(member) })
 	return member
 }
 func AddUserToMaps(member *User) {
-	Logger.Verbose <- Logger.Msg{"Add User: " + member.Name}
 	Users[member.Name] = member
 }
 
@@ -99,14 +92,15 @@ func RequestUsersByName(name string, args ...interface{}) <-chan *User {
 func parseUser(rows *sql.Rows) *User {
 	var name string
 	if err := rows.Scan(&name); err != nil {
-		Logger.Error <- Logger.ErrMsg{Err: err, Status: "databasing.members.Parse"}
+		log.Fatalf(" databasing.members.Parse: Error: %s", err)
 	}
 	return NewUserFull(name)
 }
 func parseUserByName(rows *sql.Rows) *User {
 	var name string
 	if err := rows.Scan(&name); err != nil {
-		Logger.Error <- Logger.ErrMsg{Err: err, Status: "databasing.members.ParseNames"}
+
+		log.Fatalf(" databasing.members.ParseNames: Error: %s", err)
 	}
 
 	return Users[name]

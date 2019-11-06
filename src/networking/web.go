@@ -1,7 +1,6 @@
 package networking
 
 import (
-	"Events"
 	"context"
 	"flag"
 	"fmt"
@@ -9,6 +8,8 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"../events"
 )
 
 const GET = "GET"
@@ -58,7 +59,7 @@ var onClose func()
 
 func End() {
 	if onClose != nil {
-		Events.FuncEvent("Networking.End", onClose)
+		events.FuncEvent("Networking.End", onClose)
 	}
 }
 
@@ -104,7 +105,7 @@ func StartWebClient(toClose chan bool) {
 	handleImg("/Success.jpg")
 
 	srv := &http.Server{Addr: ":8080"}
-	Events.GoFuncEvent("Networking.ListenAndServe", func() {
+	events.GoFuncEvent("Networking.ListenAndServe", func() {
 		if err := http.ListenAndServe(":8080", nil); err != nil {
 			log.Fatalf("networking.web.ListenAndServer:%s", err)
 		}

@@ -1,17 +1,18 @@
 package main
 
 import (
-	"Events"
 	"bufio"
 	"databasing"
 	"math/rand"
 	"networking"
 	"os"
 	"time"
+
+	"./events"
 )
 
 func Run(Shutdown chan bool) {
-	Events.GoFuncEvent("Networking.StartWebClient", func() {
+	events.GoFuncEvent("Networking.StartWebClient", func() {
 		Networking.StartWebClient(Shutdown)
 	})
 }
@@ -58,7 +59,7 @@ func MainStart(name string, f func(chan bool), adminCommand func(string) bool, e
 			}
 		}
 	}()
-	Events.DoneFuncEvent(name, f, Shutdown)
+	events.DoneFuncEvent(name, f, Shutdown)
 	<-Shutdown
 	end()
 }

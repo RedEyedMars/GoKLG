@@ -22,28 +22,6 @@ body {
   overflow: auto;
   display: block;
 }
-#channel_titles {
-  background: gray;
-  margin: 0;
-  position: absolute;
-  top: 2.5em;
-  left: 0.25em;
-  width: 100%;
-  height: 3em;
-  overflow: auto;
-  display:block;
-}
-.channel_title {
-  background: white;
-  margin: 0.25em;
-  padding: 0.5em 0.5em 0.5em 0.5em;
-  width: 6em;
-  overflow: auto;
-  display:inline-block;
-}
-#selected_channel {
-  background: LightGreen;
-}
 
 .name_status_img {
   width: 20px;
@@ -63,41 +41,4 @@ body {
   width: 6em;
   overflow: auto;
   font-size: 24px;
-}
-
-#channel_log {
-  background: white;
-  margin: 0;
-  padding: 0.5em 0.5em 0.5em 0.5em;
-  position: absolute;
-  top: 5.5em;
-  left: 0.5em;
-  right: 0.5em;
-  bottom: 3em;
-  overflow: auto;
-  display:block;
-}
-.channel_logs {
-  display:none;
-}
-#log_div {
-
-}
-#chat {
-  padding: 0 0.5em 0 0.5em;
-  margin: 0;
-  position: absolute;
-  bottom: 1em;
-  left: 0px;
-  width: 100%;
-  overflow: hidden;
-}
-
-.other_persons_chat {
-  text-align: left;
-  outline: 2px solid green;
-  padding: 0.5em 0.5em 0.5em 0.5em;
-}
-.my_persons_chat {
-  padding: 0.5em 0.5em 0.5em 0.5em;
 }

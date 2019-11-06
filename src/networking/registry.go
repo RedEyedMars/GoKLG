@@ -1,7 +1,7 @@
 package networking
 
 import (
-	"Events"
+	"../events"
 )
 
 type ClientRegistry struct {
@@ -19,17 +19,17 @@ func newRegistry() *ClientRegistry {
 }
 
 func (h *ClientRegistry) run() {
-	Events.GoFuncEvent("ClientRegistry.RunRegistry", h.run_registry)
+	events.GoFuncEvent("ClientRegistry.RunRegistry", h.runRegistry)
 }
-func (h *ClientRegistry) run_registry() {
+func (h *ClientRegistry) runRegistry() {
 	for {
 		select {
 		case client := <-h.register:
-			Events.FuncEvent("ClientRegistry.Register", func() {
+			events.FuncEvent("ClientRegistry.Register", func() {
 				h.clients[client] = true
 			})
 		case client := <-h.unregister:
-			Events.FuncEvent("ClientRegistry.Unregister", func() {
+			events.FuncEvent("ClientRegistry.Unregister", func() {
 				if _, ok := h.clients[client]; ok {
 					delete(h.clients, client)
 					close(client.send)
