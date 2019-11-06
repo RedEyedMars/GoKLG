@@ -2,10 +2,12 @@ package main
 
 import (
 	"bufio"
-	"databasing"
+	"log"
 	"math/rand"
 	"os"
 	"time"
+
+	"./src/databasing"
 
 	"./src/events"
 	"./src/networking"
@@ -55,6 +57,7 @@ func MainStart(name string, f func(chan bool), adminCommand func(string) bool, e
 		}
 	}()
 	events.DoneFuncEvent(name, f, Shutdown)
+	log.Printf(" Waiting for done")
 	<-Shutdown
 	end()
 }
