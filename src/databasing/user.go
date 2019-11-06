@@ -110,7 +110,7 @@ func InsertUser(name string, pwd string) <-chan *User {
 			query: "Users_ByName",
 			args:  []interface{}{name},
 			sender: &DBUserResponse{
-				chl:       response,
+				chl:       responseInterm,
 				assembler: parseUser,
 			},
 		}
