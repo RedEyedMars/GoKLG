@@ -28,6 +28,7 @@ channels_names
 **/
 
 var Users map[string]*User
+var UsersById map[int64]*User
 
 type User struct {
 	ID   int64
@@ -54,17 +55,19 @@ func NewUserFull(id int64, name string) *User {
 	return member
 }
 func AddUserToMaps(member *User) {
+	UsersById[member.ID] = member
 	Users[member.Name] = member
 }
 
 func SetupUsers(db *sql.DB) {
 	defineQuery(db, "Users_All", `SELECT name FROM user ;`)
 
-	defineQuery(db, "Users_ById", `SELECT name FROM user WHERE id=? ;`)
-	defineQuery(db, "Users_ByName", `SELECT id FROM user WHERE name=? ;`)
-	defineQuery(db, "Users_ByPwd", `SELECT id FROM pwds WHERE pwd=? ;`)
+	defineQuery(db, "Users_ById", `SELECT id,name FROM user WHERE id=? ;`)
+	defineQuery(db, "Users_ByName", `SELECT id,name FROM user WHERE name=? ;`)
+	defineQuery(db, "Users_ByPwd", `SELECT id,name FROM pwds WHERE pwd=? ;`)
 
-	defineQuery(db, "Users_Add", `INSERT INTO user VALUES (NULL,?);INSERT INTO pwds VALUES(?,SELECT id FROM user WHERE name=? );SELECT id,user FROM user WHERE name=?;`)
+	defineQuery(db, "Users_AddUser", `INSERT INTO user VALUES (NULL,?);`)
+	defineQuery(db, "Users_AddPwd", `INSERT INTO pwds VALUES(?,?);`)
 	defineQuery(db, "Users_Remove", `DELETE FROM user WHERE name = ?;`)
 }
 
@@ -94,14 +97,34 @@ func RequestUsersByName(name string, args ...interface{}) <-chan *User {
 }
 func InsertUser(name string, pwd string) <-chan *User {
 	response := make(chan *User, 1)
-	actions <- &DBQueryResponse{
-		query: "Users_Add",
-		args:  []interface{}{name, pwd, name, name},
-		sender: &DBUserResponse{
-			chl:       response,
-			assembler: parseUser,
-		},
-	}
+	go func() {
+		responseUser := make(chan bool, 1)
+		queries <- &DBActionResponse{
+			exec: "Users_AddUser",
+			args: []interface{}{name},
+			chl:  responseUser,
+		}
+		responseInterm := make(chan *User, 1)
+		<-responseUser
+		queries <- &DBQueryResponse{
+			query: "Users_ByName",
+			args:  []interface{}{name},
+			sender: &DBUserResponse{
+				chl:       response,
+				assembler: parseUser,
+			},
+		}
+		responsePwd := make(chan bool, 1)
+		user := <-responseInterm
+		queries <- &DBActionResponse{
+			exec: "Users_AddPwd",
+			args: []interface{}{pwd, user.ID},
+			chl:  responsePwd,
+		}
+		<-responsePwd
+		response <- user
+	}()
+
 	return response
 }
 func parseUser(rows *sql.Rows) *User {
@@ -122,4 +145,13 @@ func parseUserByName(rows *sql.Rows) *User {
 	}
 
 	return Users[name]
+}
+func parseUserById(rows *sql.Rows) *User {
+	var id int64
+	if err := rows.Scan(&id); err != nil {
+
+		log.Fatalf(" databasing.members.ParseNames: Error: %s", err)
+	}
+
+	return UsersById[id]
 }
