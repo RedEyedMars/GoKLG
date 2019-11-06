@@ -38,7 +38,7 @@ func HandleEvent(event Event) {
 	log.Printf(" <%s> %s", event.GetName(), "Finish")
 }
 
-func DoneFuncEvent(name string, Function1 func(chan bool), Shutdown chan bool) {
-	log.Printf(" <func(%s)> %s\n", name, "Done")
-	Function1(Shutdown)
+func DoneFuncEvent(name string, function1 func(chan bool), Shutdown chan bool) {
+	log.Printf(" <func(%s)> %s\n", name, " Starting Done Func")
+	function1(Shutdown)
 }
