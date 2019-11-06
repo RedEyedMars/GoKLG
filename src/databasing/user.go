@@ -30,6 +30,7 @@ channels_names
 var Users map[string]*User
 
 type User struct {
+	ID   int64
 	Name string
 }
 
@@ -45,8 +46,9 @@ func (mr *DBUserResponse) close() {
 	close(mr.chl)
 }
 
-func NewUserFull(name string) *User {
+func NewUserFull(id int64, name string) *User {
 	member := &User{
+		ID:   id,
 		Name: name}
 	events.FuncEvent("databasing.members.AddUserToMap:"+name, func() { AddUserToMaps(member) })
 	return member
@@ -58,10 +60,11 @@ func AddUserToMaps(member *User) {
 func SetupUsers(db *sql.DB) {
 	defineQuery(db, "Users_All", `SELECT name FROM user ;`)
 
-	defineQuery(db, "Users_ByName", `SELECT name FROM user WHERE name=? ;`)
-	defineQuery(db, "Users_ByPwd", `SELECT name FROM user WHERE pwd=? ;`)
+	defineQuery(db, "Users_ById", `SELECT name FROM user WHERE id=? ;`)
+	defineQuery(db, "Users_ByName", `SELECT id FROM user WHERE name=? ;`)
+	defineQuery(db, "Users_ByPwd", `SELECT id FROM pwds WHERE pwd=? ;`)
 
-	defineQuery(db, "Users_Add", `INSERT INTO user VALUES (?,?);`)
+	defineQuery(db, "Users_Add", `INSERT INTO user VALUES (NULL,?);INSERT INTO pwds VALUES(?,SELECT id FROM user WHERE name=? );SELECT id,user FROM user WHERE name=?;`)
 	defineQuery(db, "Users_Remove", `DELETE FROM user WHERE name = ?;`)
 }
 
@@ -89,12 +92,27 @@ func RequestUsersByName(name string, args ...interface{}) <-chan *User {
 	}
 	return response
 }
+func InsertUser(name string, pwd string) <-chan *User {
+	response := make(chan *User, 1)
+	actions <- &DBQueryResponse{
+		query: "Users_Add",
+		args:  []interface{}{name, pwd, name, name},
+		sender: &DBUserResponse{
+			chl:       response,
+			assembler: parseUser,
+		},
+	}
+	return response
+}
 func parseUser(rows *sql.Rows) *User {
-	var name string
-	if err := rows.Scan(&name); err != nil {
+	var (
+		name string
+		id   int64
+	)
+	if err := rows.Scan(&id, &name); err != nil {
 		log.Fatalf(" databasing.members.Parse: Error: %s", err)
 	}
-	return NewUserFull(name)
+	return NewUserFull(id, name)
 }
 func parseUserByName(rows *sql.Rows) *User {
 	var name string

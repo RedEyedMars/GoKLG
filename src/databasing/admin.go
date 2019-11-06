@@ -32,7 +32,7 @@ func SetupAdminCommands() {
 		adminCommands = make(map[string]Events.Event)
 		//adminCommands["exit"] = &Events.Function{Name: "Admin!Exit", Function: func() { Shutdown <- true }}
 		adminCommands["addMember"] = &Events.Function{Name: "Admin!AddMember_Full", Function: makeAdminFunc(2,
-			func(args ...string) { RequestAction("Members", "Add", NewUserFull(args[0]).Name, args[1]) })}
+			func(args ...string) { InsertUser(args[0], args[1]) })}
 		adminCommands["removeMember"] = &Events.Function{Name: "Admin!RemoveMember", Function: makeAdminFunc(1,
 			func(args ...string) { RequestAction("Members", "Remove", args[0]) })}
 	}

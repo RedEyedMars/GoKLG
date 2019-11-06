@@ -19,7 +19,7 @@ func setupLoginCommands(registry *ClientRegistry) {
 		pwdAsString := fmt.Sprintf("%x", hash.Sum(nil)[:])
 		if member := <-databasing.RequestUser("ByPwd", pwdAsString); member != nil {
 			c.name = member.Name
-			c.send <- []byte(fmt.Sprintf("{login_successful;;%s}", member.Name))
+			c.send <- []byte(fmt.Sprintf("{login_successful:%s}", member.Name))
 			log.Printf(" networking.attempt_login.Login successful")
 		} else {
 			c.send <- []byte("{login_failed}Credentials not accepted, either check your password or your username!")
@@ -38,14 +38,14 @@ func setupLoginCommands(registry *ClientRegistry) {
 			hash.Write([]byte(adminPassword))
 			hash.Write([]byte(pwd))
 			pwdAsString := fmt.Sprintf("%x", hash.Sum(nil)[:])
-			if member := <-databasing.RequestUser("ByPwd", pwdAsString); member == nil {
-				member := databasing.NewUserFull(username)
-				events.GoFuncEvent("client.Signup.AddUser", func() {
-					databasing.RequestAction("Users", "Add", member, pwdAsString)
-				})
-				c.name = member.Name
+			if user := <-databasing.RequestUser("ByPwd", pwdAsString); member == nil {
 
-				c.send <- []byte(fmt.Sprintf("{signup_successful;;%s}", member.Name))
+				events.FuncEvent("client.Signup.AddUser", func() {
+					user = <-databasing.InsertUser(username, pwdAsString)
+				})
+				c.name = user.Name
+
+				c.send <- []byte(fmt.Sprintf("{signup_successful:%s}", member.Name))
 				log.Printf(" networking.attempt_signup.Signup Successful!")
 			} else {
 				c.send <- []byte("{login_failed}Credentials not accepted, try a different password and username!")
@@ -55,7 +55,7 @@ func setupLoginCommands(registry *ClientRegistry) {
 	}
 
 	commands["attempt_logout"] = func(c *Client, msg []byte, user []byte) {
-		c.send <- []byte("{logout_successful}")
 		c.name = "_none_"
+		c.send <- []byte("{logout_successful}")
 	}
 }
