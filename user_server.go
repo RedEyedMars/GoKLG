@@ -11,11 +11,6 @@ import (
 	"./src/networking"
 )
 
-func Run(Shutdown chan bool) {
-	events.GoFuncEvent("networking.StartWebClient", func() {
-		networking.StartWebClient(Shutdown)
-	})
-}
 func main() {
 
 	rand.Seed(time.Now().UTC().UnixNano())
@@ -23,7 +18,7 @@ func main() {
 	if len(args) <= 1 {
 		MainStart("main.Run", func(Shutdown chan bool) {
 			databasing.Run(Shutdown)
-			Run(Shutdown)
+			networking.Run(Shutdown)
 		},
 			func(msg string) bool {
 				if !networking.HandleAdminCommand(msg) {
@@ -38,7 +33,7 @@ func main() {
 	} else {
 		switch args[1] {
 		case "chat_service":
-			MainStart("main.Run", Run, networking.HandleAdminCommand, networking.End)
+			MainStart("networking.Run", networking.Run, networking.HandleAdminCommand, networking.End)
 		case "setup_database":
 			MainStart("databasing.Setup", databasing.Run, databasing.HandleAdminCommand, databasing.End)
 		}

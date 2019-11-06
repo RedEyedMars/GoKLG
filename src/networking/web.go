@@ -57,6 +57,11 @@ func handleJs(libName string) {
 
 var onClose func()
 
+func Run(Shutdown chan bool) {
+	events.GoFuncEvent("networking.StartWebClient", func() {
+		StartWebClient(Shutdown)
+	})
+}
 func End() {
 	if onClose != nil {
 		events.FuncEvent("Networking.End", onClose)
