@@ -41,7 +41,7 @@ func handleImg(imgName string) {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 			return
 		}
-		http.ServeFile(w, r, "assets/imgs"+r.URL.String())
+		http.ServeFile(w, r, "src/www/assets/imgs"+r.URL.String())
 	})
 }
 func handleJs(libName string) {
