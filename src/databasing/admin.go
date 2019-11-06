@@ -2,6 +2,7 @@ package databasing
 
 import (
 	"Events"
+	"log"
 	"strings"
 )
 
@@ -39,6 +40,7 @@ func SetupAdminCommands() {
 }
 func HandleAdminCommand(msg string) bool {
 	splice := strings.Split(msg, " ")
+	log.Printf(" database handle :" + msg)
 	if len(splice) == 1 {
 		if command := adminCommands[msg]; command == nil {
 			return false
