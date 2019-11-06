@@ -27,7 +27,7 @@ window.onload = function () {
     conn = new WebSocket("ws://" + document.location.host + "/ws");
     conn.onopen = function (evt) { conn.send("{new_connection}"); };
     conn.onclose = function (evt) {
-      appendLog("<b>Connection closed.</b>");
+      console.log("<b>Connection closed.</b>");
       appendSigninStatus("<b>Connection closed.</b>");
     };
     conn.onmessage = function (evt) {
@@ -36,7 +36,7 @@ window.onload = function () {
         commands[result[1]](result[4],result[3]);
     };
   } else {
-    appendLog("<b>Your browser does not support WebSockets.</b>");
+    console.log("Your browser does not support WebSockets.");
     appendSigninStatus("<b>Your browser does not support WebSockets.</b>");
   }
 };
