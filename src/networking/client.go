@@ -166,8 +166,6 @@ const (
 )
 
 var mode = client
-var adminCommands map[string]events.Event
-var adminArgs []string
 var commands map[string]func(*Client, []byte, []byte)
 
 func setupClientCommands(registry *ClientRegistry) {
