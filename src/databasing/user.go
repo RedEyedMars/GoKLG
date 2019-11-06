@@ -64,7 +64,7 @@ func SetupUsers(db *sql.DB) {
 
 	defineQuery(db, "Users_ById", `SELECT id,name FROM user WHERE id=? ;`)
 	defineQuery(db, "Users_ByName", `SELECT id,name FROM user WHERE name=? ;`)
-	defineQuery(db, "Users_ByPwd", `SELECT id,SELECT name FROM user WHERE 'id'=id FROM pwds WHERE pwd=? ;`)
+	defineQuery(db, "Users_ByPwd", `SELECT user.id,user.name FROM pwds WHERE pwd=? INNER JOIN user WHERE pwds.id=user.id;`)
 
 	defineQuery(db, "Users_AddUser", `INSERT INTO user VALUES (NULL,?);`)
 	defineQuery(db, "Users_AddPwd", `INSERT INTO pwds VALUES(?,?);`)
