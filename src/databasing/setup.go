@@ -108,7 +108,7 @@ func defineQuery(db *sql.DB, name string, query string) {
 	}
 }
 func Run(Shutdown chan bool) {
-	log.Printf(" databasing.Run: Setting up database...")
+	log.Println(" databasing.Run: Setting up database...")
 	events.GoFuncEvent("databasing.Run", func() {
 		events.FuncEvent("databasing.Setup", Setup)
 		events.FuncEvent("databasing.StartDatabase", func() { StartDatabase(Shutdown) })
@@ -170,14 +170,9 @@ func StartMessageListening(db *sql.DB) {
 			if request == nil {
 				return
 			}
-			go request.execute()
+			request.execute()
 		}
 	}
-}
-
-func Close() {
-	close(queries)
-	close(actions)
 }
 
 func IsName(input string) bool {

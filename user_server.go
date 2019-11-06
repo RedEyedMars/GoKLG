@@ -23,18 +23,18 @@ func main() {
 			func(msg string) bool {
 				if !networking.HandleAdminCommand(msg) {
 					return databasing.HandleAdminCommand(msg)
-				} else {
-					return true
 				}
+				return true
+
 			}, func() {
 				databasing.End()
 				networking.End()
 			})
 	} else {
 		switch args[1] {
-		case "chat_service":
+		case "web":
 			MainStart("networking.Run", networking.Run, networking.HandleAdminCommand, networking.End)
-		case "setup_database":
+		case "database":
 			MainStart("databasing.Setup", databasing.Run, databasing.HandleAdminCommand, databasing.End)
 		}
 	}
