@@ -4,16 +4,16 @@ import (
 	"bufio"
 	"databasing"
 	"math/rand"
-	"networking"
 	"os"
 	"time"
 
 	"./events"
+	"./networking"
 )
 
 func Run(Shutdown chan bool) {
-	events.GoFuncEvent("Networking.StartWebClient", func() {
-		Networking.StartWebClient(Shutdown)
+	events.GoFuncEvent("networking.StartWebClient", func() {
+		networking.StartWebClient(Shutdown)
 	})
 }
 func main() {
@@ -26,19 +26,19 @@ func main() {
 			Run(Shutdown)
 		},
 			func(msg string) bool {
-				if !Networking.HandleAdminCommand(msg) {
+				if !networking.HandleAdminCommand(msg) {
 					return databasing.HandleAdminCommand(msg)
 				} else {
 					return true
 				}
 			}, func() {
 				databasing.End()
-				Networking.End()
+				networking.End()
 			})
 	} else {
 		switch args[1] {
 		case "chat_service":
-			MainStart("main.Run", Run, Networking.HandleAdminCommand, Networking.End)
+			MainStart("main.Run", Run, networking.HandleAdminCommand, networking.End)
 		case "setup_database":
 			MainStart("databasing.Setup", databasing.Run, databasing.HandleAdminCommand, databasing.End)
 		}

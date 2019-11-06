@@ -89,6 +89,7 @@ func RequestAction(mode string, name string, args ...interface{}) <-chan bool {
 
 func Setup() {
 	dbQueries = make(map[string]*sql.Stmt)
+	SetupAdminCommands()
 
 	queries = make(chan dbQuery, 16)
 	actions = make(chan dbQuery, 16)
