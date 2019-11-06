@@ -51,6 +51,7 @@ func MainStart(name string, f func(chan bool), adminCommand func(string) bool, e
 				Shutdown <- true
 				break
 			} else {
+				log.Printf(text)
 				adminCommand(text)
 			}
 		}
