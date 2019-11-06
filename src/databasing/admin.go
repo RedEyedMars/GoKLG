@@ -36,7 +36,7 @@ func SetupAdminCommands() {
 		adminCommands["addMember"] = &events.Function{Name: "Admin!AddMember_Full", Function: makeAdminFunc(2,
 			func(args ...string) { InsertUser(args[0], args[1]) })}
 		adminCommands["removeMember"] = &events.Function{Name: "Admin!RemoveMember", Function: makeAdminFunc(1,
-			func(args ...string) { RequestAction("Members", "Remove", args[0]) })}
+			func(args ...string) { RequestAction("Users", "Remove", args[0]) })}
 	}
 }
 func HandleAdminCommand(msg string) bool {
