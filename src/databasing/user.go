@@ -77,7 +77,7 @@ func SetupUsers(db *sql.DB) {
 
 	defineQuery(db, "Users_All", `SELECT name FROM user ;`)
 
-	defineQuery(db, "UserId_ById", `SELECT id FROM user WHERE id=? ;`)
+	defineQuery(db, "UsersId_ByName", `SELECT id FROM user WHERE name=? ;`)
 
 	defineQuery(db, "Users_ById", `SELECT id,name FROM user WHERE id=? ;`)
 	defineQuery(db, "Users_ByName", `SELECT id,name FROM user WHERE name=? ;`)
