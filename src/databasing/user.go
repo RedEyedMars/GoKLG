@@ -60,6 +60,9 @@ func AddUserToMaps(member *User) {
 }
 
 func SetupUsers(db *sql.DB) {
+	Users = make(map[string]*User)
+	UsersById = make(map[int64]*User)
+
 	defineQuery(db, "Users_All", `SELECT name FROM user ;`)
 
 	defineQuery(db, "Users_ById", `SELECT id,name FROM user WHERE id=? ;`)
