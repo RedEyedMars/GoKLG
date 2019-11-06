@@ -12,15 +12,13 @@ import (
 )
 
 /**
-+---------------------+
-| Tables_in_chat_msg  |
-+---------------------+
-| channels_names      |
-| client_names        |
-| messages            |
-| resource_allocation |
-| resources           |
-+---------------------+
++---------------+
+| Tables_in_klp |
++---------------+
+| activity      |
+| user          |
+| user_activity |
++---------------+
 **/
 
 var dbQueries map[string]*sql.Stmt
@@ -117,7 +115,7 @@ func Run(Shutdown chan bool) {
 
 func StartDatabase(Shutdown chan bool) {
 	dbUser := "chat_root"
-	dbName := "chat_msg"
+	dbName := "klg"
 	dbEndpoint := "chat-service.c84g8cm4el5a.us-west-2.rds.amazonaws.com"
 
 	// Create the MySQL DNS string for the DB connection

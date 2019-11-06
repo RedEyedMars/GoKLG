@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"./src/databasing"
-
 	"./src/events"
 	"./src/networking"
 )
