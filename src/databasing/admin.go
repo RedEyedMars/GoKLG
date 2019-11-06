@@ -33,10 +33,10 @@ func SetupAdminCommands() {
 	if adminCommands == nil {
 		adminCommands = make(map[string]events.Event)
 		//adminCommands["exit"] = &events.Function{Name: "Admin!Exit", Function: func() { Shutdown <- true }}
-		adminCommands["addMember"] = &events.Function{Name: "Admin!AddMember_Full", Function: makeAdminFunc(2,
+		adminCommands["add"] = &events.Function{Name: "Admin!Add", Function: makeAdminFunc(2,
 			func(args ...string) { InsertUser(args[0], args[1]) })}
-		adminCommands["removeMember"] = &events.Function{Name: "Admin!RemoveMember", Function: makeAdminFunc(1,
-			func(args ...string) { RequestAction("Users", "Remove", args[0]) })}
+		adminCommands["remove"] = &events.Function{Name: "Admin!Remove", Function: makeAdminFunc(1,
+			func(args ...string) { DeleteUser(args[0]) })}
 	}
 }
 func HandleAdminCommand(msg string) bool {
