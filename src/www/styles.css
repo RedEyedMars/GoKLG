@@ -94,8 +94,8 @@ table.contact_me_table {
   cursor:pointer;
   background: #bbb4aa;
   color: white;
-  margin-top: 0.1em;
-  margin-bottom: 0.1em;
+  margin-top: 4%;
+  margin-bottom: 4%;
   padding: 0.5em 0.5em 0.5em 0.5em;
   width: 8em;
   overflow: auto;
