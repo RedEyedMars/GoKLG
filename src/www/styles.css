@@ -31,6 +31,10 @@ body {
   padding-left: 50%;
 }
 
+#login_buttons {
+  padding-left: 45%;
+}
+
 .name_status_img {
   width: 20px;
   height: 20px;
