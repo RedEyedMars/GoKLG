@@ -68,7 +68,9 @@ body {
   display:none;
   background: #bbb4aa;
   position:absolute;
-  left:12em;
+  left:10em;
+  top:5em;
+  padding: 2em 2em 2em 2em;
 }
 
 #contact_me{
