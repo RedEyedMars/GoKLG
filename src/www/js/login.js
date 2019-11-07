@@ -29,17 +29,18 @@ function checkPassword_(){
 }
 
 function login(username_val){
-  location.href = "http://redeyedmars.com/main.html"
+  document.getElementById("popup").style.display = "none";
+  document.getElementById("chat_div").style.display = "block";
 
   username = document.getElementById("displayusername");
   username.innerHTML = username_val;
 
-};
+}
 function logout(){
+  document.getElementById("popup").style.display = "block";
+  document.getElementById("chat_div").style.display = "none";
 
-  location.href = "http://redeyedmars.com/"
-
-};
+}
 function signin_() {
     if (checkUsername_()&&checkPassword_()){
       var password = document.getElementById("pass").value;

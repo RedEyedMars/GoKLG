@@ -16,35 +16,21 @@ const GET = "GET"
 
 var addr = flag.String("addr", ":8080", "http service address")
 var Shutdown chan bool
+var homeHtml string
 
-func handlePages(pageNames ...string) {
-	for i, pageName := range pageNames {
-
-		raw, err := ioutil.ReadFile(fmt.Sprintf("src/www%s", pageName))
-		if err != nil {
-			log.Fatalf("networking.web.handlePages:%s", err)
-		}
-		html := string(raw)
-
-		handleName := pageName
-		if i == 0 {
-			handleName = "/"
-		}
-		http.HandleFunc(handleName, func(w http.ResponseWriter, r *http.Request) {
-
-			log.Printf(" networking.web.handlePage:%s", r.URL.String())
-			if r.URL.Path != handleName {
-				http.Error(w, "Not found", http.StatusNotFound)
-				return
-			}
-			if r.Method != "GET" {
-				http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-				return
-			}
-			w.Header().Set("Content-Type", "text/html")
-			fmt.Fprint(w, html)
-		})
+func serveHome(w http.ResponseWriter, r *http.Request) {
+	log.Printf(" networking.web.serveHome:%s", r.URL.String())
+	if r.URL.Path != "/" {
+		http.Error(w, "Not found", http.StatusNotFound)
+		return
 	}
+	if r.Method != "GET" {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	fmt.Fprint(w, homeHtml)
+	//http.ServeFile(w, r, "src/Networking/home.html")
 }
 
 func handleImgs(imgNames ...string) {
@@ -90,6 +76,11 @@ func StartWebClient(toClose chan bool) {
 	Shutdown = toClose
 	SetupAdminCommands()
 	setupNetworkingRegex()
+	homeRaw, err := ioutil.ReadFile("src/www/home.html")
+	if err != nil {
+		log.Fatalf("networking.web.StartWebClient:%s", err)
+	}
+	homeHtml = string(homeRaw)
 
 	flag.Parse()
 	registry := newRegistry()
@@ -97,12 +88,7 @@ func StartWebClient(toClose chan bool) {
 
 	setupClientCommands(registry)
 
-	handlePages(
-		"/login.html", // home
-		"/login.html", // if requested
-		"/main.html",  // first page on login
-
-	)
+	http.HandleFunc("/", serveHome)
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		serveWs(registry, w, r)
 	})
