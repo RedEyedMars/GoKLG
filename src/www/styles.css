@@ -29,7 +29,7 @@ body {
 }
 #site_div {
     display: none;
-    background-image:linear-gradient(white,black);
+    background-image:linear-gradient(white,red,black);
     width: 100%;
     height:100%;
 
