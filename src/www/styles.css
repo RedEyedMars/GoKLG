@@ -68,8 +68,9 @@ body {
   display:none;
   background: #bbb4aa;
   position:absolute;
-  left:10em;
+  left:12em;
   top:5em;
+  width: 70%;
   padding: 2em 2em 2em 2em;
 }
 
@@ -95,7 +96,8 @@ table.contact_me_table {
   color: white;
   margin-top: 0.1em;
   margin-bottom: 0.1em;
-  width: 6em;
+  padding: 0.5em 0.5em 0.5em 0.5em;
+  width: 8em;
   overflow: auto;
   font-size: 24px;
 }
