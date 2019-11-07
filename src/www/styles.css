@@ -29,6 +29,7 @@ body {
 }
 #site_div {
     display: none;
+    background-image:linear-gradient(black,white);
 }
 
 #displayusername {
