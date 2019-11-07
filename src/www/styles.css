@@ -62,6 +62,8 @@ body {
 }
 
 #displayusername {
+  position:absolute;
+  top:1em;
 }
 
 .site_page {
