@@ -5,7 +5,6 @@
 <title>Chat Example</title>
 <link rel="stylesheet" type="text/css" href="styles.css">
 <script type="text/javascript">
-var conn;
 var username;
 var logs;
 var commands = {};
@@ -20,25 +19,23 @@ commands["new_connection"] = function(msg,user) {
 <script type="text/javascript">
 
 window.onload = function () {
-  const msg = document.getElementById("msg");
-  logs = document.getElementById("log_div");
-  username = document.getElementById("displayusername");
-
-  if (window["WebSocket"]) {
-    conn = new WebSocket("ws://" + document.location.host + "/ws");
-    conn.onopen = function (evt) { conn.send("{new_connection}"); };
-    conn.onclose = function (evt) {
-      console.log("<b>Connection closed.</b>");
-      appendSigninStatus("<b>Connection closed.</b>");
-    };
-    conn.onmessage = function (evt) {
+  if(!username){
+    if (window["WebSocket"]) {
+      conn = new WebSocket("ws://" + document.location.host + "/ws");
+      conn.onopen = function (evt) { conn.send("{new_connection}"); };
+      conn.onclose = function (evt) {
+        console.log("Connection closed.");
+        appendSigninStatus("<b>Connection closed.</b>");
+      };
+      conn.onmessage = function (evt) {
         var result = /\{([^\{\};:?]+)(:)?([a-zA-Z0-9_-]+)?\}(.*)/g.exec(evt.data);
         console.log(result);
         commands[result[1]](result[4],result[3]);
-    };
-  } else {
-    console.log("Your browser does not support WebSockets.");
-    appendSigninStatus("<b>Your browser does not support WebSockets.</b>");
+      };
+    } else {
+      console.log("Your browser does not support WebSockets.");
+      appendSigninStatus("<b>Your browser does not support WebSockets.</b>");
+    }
   }
 };
 </script>
@@ -56,16 +53,6 @@ window.onload = function () {
   <br>
   <button onclick="signin_()">Sign in</button>
   <button onclick="signup_()">Sign up</button>
-</div>
-<div id="chat_div">
-  <div id="displayusername"></div>
-  <div id="channel_titles"></div>
-  <div id="log_div"></div>
-  <form id="chat">
-    <input type="submit" value="Send" />
-    <input type="text" id="msg" size="64"/>
-    <button onclick="attempt_logout()">Logout</button>
-  </form>
 </div>
 </body>
 </html>
