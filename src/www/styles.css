@@ -5,14 +5,13 @@ html {
   height: 100%;
 }
 body {
-    display: none;
     background-image:linear-gradient(black,#C54A3A,white);
     width: 100%;
     height:100%;
     overflow: auto;
 }
 #popup {
-  background: white;
+  background: gray;
   margin: 0;
   padding: 1em 1em 1em 1em;
   position: absolute;
@@ -22,12 +21,20 @@ body {
   display: block;
 }
 
+#login_user_div {
+  left: 40%;
+}
+#login_pwd_div {
+  left: 50%;
+}
+
 .name_status_img {
   width: 20px;
   height: 20px;
 }
 #site_div {
 
+      display: none;
 }
 
 #displayusername {
