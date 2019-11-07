@@ -16,7 +16,7 @@ func send_email(user, email, body string) {
 		"Email:" + email +
 		body
 
-	err := smtp.SendMail("smtp.live.com:465",
+	err := smtp.SendMail("smtp.live.com:587",
 		smtp.PlainAuth("", from, pass, "smtp.live.com"),
 		from, []string{to}, []byte(msg))
 
