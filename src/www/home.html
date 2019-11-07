@@ -46,6 +46,7 @@ window.onload = function () {
 <body>
 
 <div id="popup">
+  <h1>Welcome to </h1><h1 id="rem">R.E.M.</h1>
   <div id="account_signin_status"></div>
   <div id="login_user_div">Username:
     <input id="username" onkeyup="checkUsername_();" type="text"/>
@@ -57,12 +58,12 @@ window.onload = function () {
       <img id="password_status" src="Pending.png" class="name_status_img" alt="This img is to display the status of the password" title="Please enter a password"></img>
   </div>
 
-  <span class="login_buttons" onclick="signin_()">
+  <span class="login_buttons" onclick="signup_()">
     <img src="Login.png"  class="signup_login_img" ></img>
-    <span class="login_button">Login</span>
+    <span class="login_button">Sign up</span>
     &nbsp;
-    <span onclick="signup_()">
-      <span class="login_button">Sign up</span>
+    <span onclick="signin_()">
+      <span class="login_button">Sign in</span>
       <img src="Signup.png"  class="signup_login_img" ></img>
     </span>
   </span>

@@ -28,21 +28,25 @@ body {
   padding-left: 40%;
 }
 #login_pwd_div {
-  padding-left: 50%;
+  padding-left: 42%;
 }
 
 .login_buttons {
   padding-left: 45%;
-  cursor:pointer;
 }
 .login_button {
   color: black;
+  cursor:pointer;
 }
 .login_button:hover {
+  cursor:pointer;
   text-shadow: 2px 2px black;
   color: white;
   font-weight: bold;
   text-decoration: underline;
+}
+#rem:hover {
+  font-style: italic;
 }
 
 .name_status_img {
