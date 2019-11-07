@@ -1,24 +1,24 @@
 function checkUsername_(){
   var username_val = document.getElementById("username").value;
   if(/^[a-z0-9_-]{3,16}$/igm.test(username_val)){
-    document.getElementById("username_status").src = "Success.jpg";
+    document.getElementById("username_status").src = "Success.png";
     document.getElementById("username_status").title = 'That username looks good!';
     return true;
   } else {
     if(username_val.length<3){
-      document.getElementById("username_status").src = "Pending.jpg";
+      document.getElementById("username_status").src = "Pending.png";
       document.getElementById("username_status").title = "Usernames must be greater than 3 characters long!";
     } else if(username_val.length>=16){
-      document.getElementById("username_status").src = "Fail.jpg";
+      document.getElementById("username_status").src = "Fail.png";
       document.getElementById("username_status").title = "Usernames must be less than 16 characters long!";
     } else if(/^.*\s.*$/igm.test(username_val)){
-      document.getElementById("username_status").src = "Fail.jpg";
+      document.getElementById("username_status").src = "Fail.png";
       document.getElementById("username_status").title = "Usernames must have no spaces in them!";
     } else if(/^.*[!@#$%^&*+=\(\)\[\]\{\}:;,\.\'\`~<>\/\\].*$/igm.test(username_val)){
-      document.getElementById("username_status").src = "Fail.jpg";
+      document.getElementById("username_status").src = "Fail.png";
       document.getElementById("username_status").title = "Usernames must have no special characters in them!";
     } else {
-      document.getElementById("username_status").src = "Fail.jpg";
+      document.getElementById("username_status").src = "Fail.png";
       document.getElementById("username_status").title = "Your username is not valid!";
     }
     return false;
