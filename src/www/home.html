@@ -79,7 +79,6 @@ window.onload = function () {
   <div id="contact_me" class="site_page">
     <h1> Contact Me </h1>
     <p> Fill out the form bellow to contact me </p> <br/>
-    <form onSubmit="submit_contact_me()">
       <table class="contact_me_table">
         <tr>
           <td> <label for="email"> Email: </label> </td>
@@ -90,10 +89,9 @@ window.onload = function () {
             <td> <textarea placeholder="Enter message here..." rows="6" style="width:300px" id="contact_me_message" name="message"/></textarea></td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right"> <input type="submit" value="Send Message"/> </td>
+            <td colspan="2" style="text-align:right"> <input type="button" onclick="submit_contact_me()" value="Send Message"/> </td>
           </tr>
         </table>
-      </form>
     <br/>
     <br/>
     <p> Feel free to send me a message! </p>
