@@ -31,7 +31,7 @@ body {
   padding-left: 50%;
 }
 
-#login_buttons {
+.login_buttons {
   padding-left: 45%;
   cursor:pointer;
 }
