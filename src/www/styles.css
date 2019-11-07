@@ -62,18 +62,13 @@ body {
 }
 
 #displayusername {
-  background: #bbb4aa;
-  color: white;
-  margin: 0;
-  width: 6em;
-  overflow: auto;
-  font-size: 24px;
 }
 
 .site_page {
   display:none;
+  background: #bbb4aa;
   position:absolute;
-  left:8em;
+  left:12em;
 }
 
 #contact_me{
@@ -96,7 +91,8 @@ table.contact_me_table {
   cursor:pointer;
   background: #bbb4aa;
   color: white;
-  margin: 0;
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
   width: 6em;
   overflow: auto;
   font-size: 24px;

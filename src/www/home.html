@@ -17,6 +17,7 @@ commands["new_connection"] = function(msg,user) {
 </script>
 <script src='/forge-sha256.min.js'></script>
 <script src='/messaging.js'></script>
+<script src='/main.js'></script>
 <script src='/contact_me.js'></script>
 <script src='/login.js'></script>
 <script type="text/javascript">
@@ -68,7 +69,10 @@ window.onload = function () {
 
 </div>
 <div id="site_div">
-  <div id="displayusername"></div>
+  <div id="displayusername" class="functional_btn"></div>
+  <div class="functional_btn" onclick="open_main_page()">Home</div>
+  <div class="functional_btn" onclick="open_contact_me()">Contact Me</div>
+  <div class="functional_btn" onclick="attempt_logout()">Logout</div>
 
   <div id="main_page" class="site_page">
     <h1>Welcome to my website<h1>
@@ -97,8 +101,6 @@ window.onload = function () {
     <p> Feel free to send me a message! </p>
   </div>
 
-  <div class="functional_btn" onclick="open_contact_me()">Contact Me</div>
-  <div class="functional_btn" onclick="attempt_logout()">Logout</div>
 </div>
 </body>
 </html>

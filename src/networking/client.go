@@ -2,11 +2,12 @@ package networking
 
 import (
 	"bytes"
-	"databasing"
 	"log"
 	"net/http"
 	"strings"
 	"time"
+
+	"../databasing"
 
 	"../events"
 
@@ -48,7 +49,6 @@ type Client struct {
 
 	name string
 
-	channels map[string]*databasing.ClientChannel
 	// Buffered channel of outbound messages.
 	send chan []byte
 	// Registered clients.
@@ -60,13 +60,12 @@ type Client struct {
 func newClient(conn *websocket.Conn) *Client {
 	ip, port := getIPFromAddress(conn.RemoteAddr().String())
 	return &Client{
-		conn:     conn,
-		ip:       ip,
-		port:     port,
-		name:     "_none_",
-		channels: make(map[string]*databasing.ClientChannel),
-		send:     make(chan []byte, 256),
-		handle:   make(chan []byte)}
+		conn:   conn,
+		ip:     ip,
+		port:   port,
+		name:   "_none_",
+		send:   make(chan []byte, 256),
+		handle: make(chan []byte)}
 }
 
 // readMessages pumps messages from the websocket connection to the hub.
@@ -174,7 +173,7 @@ func setupClientCommands(registry *ClientRegistry) {
 	commands["new_connection"] = func(c *Client, msg []byte, user []byte) {}
 	commands["contact_me"] = func(c *Client, msg []byte, user []byte) {
 		m := strings.Split(string(msg), "::")
-		send_email(string(user), m[0], m[1])
+		databasing.SaveEmail(string(user), m[0], m[1])
 	}
 	setupLoginCommands(registry)
 }
