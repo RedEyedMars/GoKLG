@@ -47,12 +47,17 @@ window.onload = function () {
 
 <div id="popup">
   <div id="account_signin_status"></div>
-  <div>Enter Username:</div>
-  <input id="username" onkeyup="checkUsername_();" type="text"/>
-  <img id="username_status" src="Pending.jpg" class="name_status_img" alt="This img is to display the status of the username" title="Please enter a username"></img>
-  <div>Enter Password:</div>
-  <input id="pass" onkeyup="checkPassword_();" type="password"/>
-  <img id="password_status" src="Pending.jpg" class="name_status_img" alt="This img is to display the status of the password" title="Please enter a password"></img>
+  <div>Username:
+    <input id="username" onkeyup="checkUsername_();" type="text"/>
+    <img id="username_status" src="Pending.jpg" class="name_status_img" alt="This img is to display the status of the username" title="Please enter a username"></img>
+  </div>
+  <div>
+      Password:
+      <input id="pass" onkeyup="checkPassword_();" type="password"/>
+      <img id="password_status" src="Pending.jpg" class="name_status_img" alt="This img is to display the status of the password" title="Please enter a password"></img>
+  </div>
+
+
   <br>
   <button onclick="signin_()">Sign in</button>
   <button onclick="signup_()">Sign up</button>
