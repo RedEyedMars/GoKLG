@@ -29,9 +29,6 @@ function checkPassword_(){
 }
 
 function login(username_val){
-  document.getElementById("popup").style.display = "none";
-  document.getElementById("chat_div").style.display = "block";
-
   location.href = "http://redeyedmars.com/main.html"
 
   username = document.getElementById("displayusername");
