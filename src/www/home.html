@@ -49,18 +49,22 @@ window.onload = function () {
   <div id="account_signin_status"></div>
   <div id="login_user_div">Username:
     <input id="username" onkeyup="checkUsername_();" type="text"/>
-    <img id="username_status" style="padding-top:10px" src="Pending.jpg" class="name_status_img" alt="This img is to display the status of the username" title="Please enter a username"></img>
+    <img id="username_status" style="top:10px" src="Pending.jpg" class="name_status_img" alt="This img is to display the status of the username" title="Please enter a username"></img>
   </div>
   <div id="login_pwd_div">
       Password:
       <input id="pass" onkeyup="checkPassword_();" type="password"/>
-      <img id="password_status" style="padding-top:10px" src="Pending.jpg" class="name_status_img" alt="This img is to display the status of the password" title="Please enter a password"></img>
+      <img id="password_status" style="top:10px" src="Pending.jpg" class="name_status_img" alt="This img is to display the status of the password" title="Please enter a password"></img>
   </div>
 
 
   <br>
-  <button onclick="signin_()">Sign in</button>
-  <button onclick="signup_()">Sign up</button>
+  <img src="Signin.jpg" onclick="signin_()"></img>
+  Login
+  &nbsp;
+  Sign-up
+  <img src="Signup.jpg" onclick="signup_()">Sign up</button>
+
 </div>
 <div id="site_div">
   <div id="displayusername"></div>

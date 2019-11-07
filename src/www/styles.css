@@ -3,6 +3,7 @@
 html {
   overflow: hidden;
   height: 100%;
+  padding: 0;
   font-family:"Courier New", Courier, monospace;
 }
 body {
@@ -24,10 +25,10 @@ body {
 }
 
 #login_user_div {
-  left: 40%;
+  padding-left: 40%;
 }
 #login_pwd_div {
-  left: 50%;
+  padding-left: 50%;
 }
 
 .name_status_img {
