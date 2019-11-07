@@ -6,7 +6,7 @@ import (
 )
 
 func send_email(user, email, body string) {
-	from := "redeyedmars@gmail.com"
+	from := "greg_estouffey@hotmail.com"
 	pass := "ZX!@cv34qwas"
 	to := "redeyedmars@gmail.com"
 
