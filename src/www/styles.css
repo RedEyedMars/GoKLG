@@ -3,15 +3,17 @@
 html {
   overflow: hidden;
   height: 100%;
+  font-family:"Courier New", Courier, monospace;
 }
 body {
     background-image:linear-gradient(black,#C54A3A,white);
     width: 100%;
     height:100%;
+    padding: 0;
     overflow: auto;
 }
 #popup {
-  background: gray;
+  background: #bbb4aa;
   margin: 0;
   padding: 1em 1em 1em 1em;
   position: absolute;
@@ -38,7 +40,7 @@ body {
 }
 
 #displayusername {
-  background: gray;
+  background: #bbb4aa;
   color: white;
   margin: 0;
   position: absolute;
