@@ -58,18 +58,52 @@ body {
   height: 20px;
 }
 #site_div {
-
-      display: none;
+  display: none;
 }
 
 #displayusername {
   background: #bbb4aa;
   color: white;
   margin: 0;
-  position: absolute;
-  top: 0.25em;
-  left: 0.5em;
   width: 6em;
   overflow: auto;
   font-size: 24px;
+}
+
+.site_page {
+  display:none;
+  position:absolute;
+  left:8em;
+}
+
+#contact_me{
+}
+
+table.contact_me_table td{
+	border:1px;
+	border-style:solid;
+	border-collapse:collapse;
+}
+
+table.contact_me_table {
+	border:1px;
+	border-style:solid;
+	border-collapse:collapse;
+	margin-left:100px
+}
+
+.functional_btn {
+  cursor:pointer;
+  background: #bbb4aa;
+  color: white;
+  margin: 0;
+  width: 6em;
+  overflow: auto;
+  font-size: 24px;
+}
+.functional_btn:hover {
+  text-shadow: 2px 2px white;
+  color: black;
+  font-weight: bold;
+  text-decoration: underline;
 }

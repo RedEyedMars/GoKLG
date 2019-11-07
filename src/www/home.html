@@ -9,6 +9,7 @@ var conn;
 var username;
 var logs;
 var commands = {};
+var current_page;
 commands["new_connection"] = function(msg,user) {
   username = document.getElementById("displayusername");
   username.innerHTML = result;
@@ -16,6 +17,7 @@ commands["new_connection"] = function(msg,user) {
 </script>
 <script src='/forge-sha256.min.js'></script>
 <script src='/messaging.js'></script>
+<script src='/contact_me.js'></script>
 <script src='/login.js'></script>
 <script type="text/javascript">
 
@@ -46,7 +48,7 @@ window.onload = function () {
 <body>
 
 <div id="popup">
-  <h3>Welcome to <span id="rem">R.E.M.</span></h3>
+  <h3 style="padding-left:10%">Welcome to <span id="rem">R.E.M.</span></h3>
   <div id="account_signin_status"></div>
   <div id="login_user_div">Username:
     <input id="username" onkeyup="checkUsername_();" type="text"/>
@@ -58,20 +60,47 @@ window.onload = function () {
       <img id="password_status" src="Pending.png" class="name_status_img" alt="This img is to display the status of the password" title="Please enter a password"></img>
   </div>
 
-  <span class="login_buttons" onclick="signup_()">
-    <img src="Login.png"  class="signup_login_img" ></img>
-    <span class="login_button">Sign up</span>
+  <span class="login_buttons" >
+    <span class="login_button" onclick="signup_()">Sign up</span>
     &nbsp;
-    <span onclick="signin_()">
-      <span class="login_button">Sign in</span>
-      <img src="Signup.png"  class="signup_login_img" ></img>
-    </span>
+    <span class="login_button" onclick="signin_()">Sign in</span>
   </span>
 
 </div>
 <div id="site_div">
   <div id="displayusername"></div>
-  <button id="logout_btn" onclick="attempt_logout()">Logout</button>
+
+  <div id="main_page" class="site_page">
+    <h1>Welcome to my website<h1>
+      <p> This business is all about connecting fans of ancient greek myths to their sources. </p>
+      <p> Take a look around and be sure to send me an email with suggetions through the contact me page </p>
+  </div>
+
+  <div id="contact_me" class="site_page">
+    <h1> Contact Me </h1>
+    <p> Fill out the form bellow to contact me </p> <br/>
+    <form onSubmit="submit_contact_me()">
+      <table class="contact_me_table">
+        <tr>
+          <td> <label for="email"> Email: </label> </td>
+          <td> <input style="width:300px" type="text" id="email" name="contact_me_email"/> </td>
+        </tr>
+        <tr>
+          <td> <label for="message"> Message: </label>
+            <td> <textarea placeholder="Enter message here..." rows="6" style="width:300px" id="contact_me_message" name="message"/></textarea></td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align:right"> <input type="submit" value="Send Message"/> </td>
+          </tr>
+        </table>
+      </form>
+    <br/>
+    <br/>
+    <p> Feel free to send me a message! </p>
+  </div>
+
+  <div class="functional_btn" onclick="open_contact_me()">Contact Me</div>
+  <div class="functional_btn" onclick="attempt_logout()">Logout</div>
 </div>
 </body>
 </html>

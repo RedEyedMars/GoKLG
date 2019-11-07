@@ -5,6 +5,7 @@ import (
 	"databasing"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"../events"
@@ -171,6 +172,10 @@ var commands map[string]func(*Client, []byte, []byte)
 func setupClientCommands(registry *ClientRegistry) {
 	commands = make(map[string]func(*Client, []byte, []byte))
 	commands["new_connection"] = func(c *Client, msg []byte, user []byte) {}
+	commands["contact_me"] = func(c *Client, msg []byte, user []byte) {
+		m := strings.Split(string(msg), "::")
+		send_email(string(user), m[0], m[1])
+	}
 	setupLoginCommands(registry)
 }
 
