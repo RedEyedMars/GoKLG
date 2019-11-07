@@ -61,10 +61,7 @@ body {
   display: none;
 }
 
-#displayusername {
-  position:absolute;
-  top:1em;
-}
+
 
 .site_page {
   display:none;
@@ -76,20 +73,14 @@ body {
   padding: 2em 2em 2em 2em;
 }
 
-#contact_me{
+#nav_bar {
+  position:absolute;
+  top:5em;
 }
 
-table.contact_me_table td{
-	border:1px;
-	border-style:solid;
-	border-collapse:collapse;
-}
-
-table.contact_me_table {
-	border:1px;
-	border-style:solid;
-	border-collapse:collapse;
-	margin-left:100px
+#displayusername {
+  position:absolute;
+  top:-1.5em;
 }
 
 .functional_btn {
@@ -108,4 +99,21 @@ table.contact_me_table {
   color: black;
   font-weight: bold;
   text-decoration: underline;
+}
+
+
+#contact_me{
+}
+
+table.contact_me_table td{
+	border:1px;
+	border-style:solid;
+	border-collapse:collapse;
+}
+
+table.contact_me_table {
+	border:1px;
+	border-style:solid;
+	border-collapse:collapse;
+	margin-left:100px
 }
