@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Chat Example</title>
+<link rel="stylesheet" type="text/css" href="styles.css">
+<script type="text/javascript">
+var conn;
+var username;
+var logs;
+var commands = {};
+commands["new_connection"] = function(msg,user) {
+  username = document.getElementById("displayusername");
+  username.innerHTML = result;
+};
+</script>
+<script src='/forge-sha256.min.js'></script>
+<script src='/messaging.js'></script>
+<script src='/login.js'></script>
+<script type="text/javascript">
+
+window.onload = function () {
+  const msg = document.getElementById("msg");
+  logs = document.getElementById("log_div");
+  username = document.getElementById("displayusername");
+
+  if (window["WebSocket"]) {
+    conn = new WebSocket("ws://" + document.location.host + "/ws");
+    conn.onopen = function (evt) { conn.send("{new_connection}"); };
+    conn.onclose = function (evt) {
+      console.log("<b>Connection closed.</b>");
+      appendSigninStatus("<b>Connection closed.</b>");
+    };
+    conn.onmessage = function (evt) {
+        var result = /\{([^\{\};:?]+)(:)?([a-zA-Z0-9_-]+)?\}(.*)/g.exec(evt.data);
+        console.log(result);
+        commands[result[1]](result[4],result[3]);
+    };
+  } else {
+    console.log("Your browser does not support WebSockets.");
+    appendSigninStatus("<b>Your browser does not support WebSockets.</b>");
+  }
+};
+</script>
+</head>
+<body>
+
+<div id="popup">
+  <div id="account_signin_status"></div>
+  <div>Enter Username:</div>
+  <input id="username" onkeyup="checkUsername_();" type="text"/>
+  <img id="username_status" src="Pending.jpg" class="name_status_img" alt="This img is to display the status of the username" title="Please enter a username"></img>
+  <div>Enter Password:</div>
+  <input id="pass" onkeyup="checkPassword_();" type="password"/>
+  <img id="password_status" src="Pending.jpg" class="name_status_img" alt="This img is to display the status of the password" title="Please enter a password"></img>
+  <br>
+  <button onclick="signin_()">Sign in</button>
+  <button onclick="signup_()">Sign up</button>
+</div>
+<div id="site_div">
+  <div id="displayusername"></div>
+  <button id="logout_btn" onclick="attempt_logout()">Logout</button>
+</div>
+</body>
+</html>
