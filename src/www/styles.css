@@ -35,6 +35,13 @@ body {
   padding-left: 45%;
   cursor:pointer;
 }
+#login_button {
+  font-color: black;
+}
+#login_button:hover {
+  text-shadow: 2px 2px black;
+  font-color: white;
+}
 
 .name_status_img {
   width: 20px;
