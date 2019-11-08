@@ -17,7 +17,7 @@ function change_accounts() {
       var prev_password = document.getElementById("change_old_pass").value;
       var password = document.getElementById("change_pass").value;
       var user_val = document.getElementById("change_username").value;
-      conn.send("{attempt_change:"+prev_user_val+"}"+user_val+","+encrypt(prev_password + prev_user_val)+","+encrypt_(password+user_val));
+      conn.send("{attempt_change:"+prev_user_val+"}"+user_val+","+encrypt_(prev_password + prev_user_val)+","+encrypt_(password+user_val));
     }
 };
 
