@@ -33,6 +33,25 @@ func serveHome(w http.ResponseWriter, r *http.Request) {
 	//http.ServeFile(w, r, "src/Networking/home.html")
 }
 
+func serveReport(w http.ResponseWriter, r *http.Request) {
+	log.Printf(" networking.web.serveHome:%s", r.URL.String())
+	if r.URL.Path != "/report.html" {
+		http.Error(w, "Not found", http.StatusNotFound)
+		return
+	}
+	if r.Method != "GET" {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	reportRaw, err := ioutil.ReadFile("src/www/report.html")
+	if err != nil {
+		log.Fatalf("networking.web.Report:%s", err)
+	}
+	fmt.Fprint(w, string(reportRaw))
+	//http.ServeFile(w, r, "src/Networking/home.html")
+}
+
 func handleImgs(imgNames ...string) {
 	for _, imgName := range imgNames {
 		http.HandleFunc(imgName, func(w http.ResponseWriter, r *http.Request) {
@@ -89,6 +108,7 @@ func StartWebClient(toClose chan bool) {
 	setupClientCommands(registry)
 
 	http.HandleFunc("/", serveHome)
+	http.HandleFunc("/report.html", serveReport)
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		serveWs(registry, w, r)
 	})

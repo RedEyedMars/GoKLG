@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Chat Example</title>
+<link rel="stylesheet" type="text/css" href="styles.css">
+<script type="text/javascript">
+var conn;
+};
+</script>
+<script type="text/javascript">
+
+window.onload = function () {
+  if (window["WebSocket"]) {
+    conn = new WebSocket("ws://" + document.location.host + "/ws");
+    conn.onopen = function (evt) { conn.send("{report}"); };
+    conn.onclose = function (evt) {
+      console.log("Connection closed.");
+    };
+    conn.onmessage = function (evt) {
+        var result = /\{([^\{\};:?]+)(:)?([a-zA-Z0-9_-]+)?\}(.*)/g.exec(evt.data);
+        console.log(result);
+        document.getElementById("output").innerHTML = result[4]
+    };
+  } else {
+    console.log("Your browser does not support WebSockets.");
+    document.getElementById("output").innerHTML = "<b>Your browser does not support WebSockets.</b>";
+  }
+};
+</script>
+</head>
+<body>
+<select id="input" onchange="conn.send('{report}'+document.getElementById('input').value);" >
+  <option value="January">January</option>
+  <option value="February">February</option>
+  <option value="March">March</option>
+  <option value="April">April</option>
+  <option value="May">May</option>
+  <option value="June">June</option>
+  <option value="July">July</option>
+  <option value="August">August</option>
+  <option value="September">September</option>
+  <option value="October">October</option>
+  <option value="November">November</option>
+  <option value="December">December</option>
+</select>
+<div id="output">Retrieving...</div>
+</body>
+</html>
