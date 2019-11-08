@@ -40,6 +40,10 @@ function login(username_val){
 
 }
 function logout(){
+  const status = document.getElementById("account_signin_status");
+  while (status.firstChild) {
+    status.removeChild(status.firstChild);
+  }
   document.getElementById("popup").style.display = "block";
   document.getElementById("site_div").style.display = "none";
   current_page.style.display = "none";

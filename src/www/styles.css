@@ -37,7 +37,8 @@ body {
   padding-left: 45%;
 }
 .login_button {
-  color: black;
+  color: white;
+  font-weight: bold;
   background: #b24327;
   padding: 0.5em 0.5em 0.5em 0.5em;
   cursor:pointer;
@@ -45,8 +46,6 @@ body {
 .login_button:hover {
   cursor:pointer;
   text-shadow: 2px 2px black;
-  color: white;
-  font-weight: bold;
   text-decoration: underline;
 }
 #rem:hover {
@@ -108,7 +107,7 @@ body {
   font-weight: bold;
   text-decoration: underline;
 
-  box-shadow: -4px 4px white;
+  box-shadow: -4px 4px black;
 }
 
 
