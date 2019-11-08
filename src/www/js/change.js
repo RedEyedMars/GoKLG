@@ -11,7 +11,7 @@ function open_account_page(){
 }
 
 function change_profile() {
-    if (checkUsername_('change_username','change_username_status')&&checkPassword_('change_pass','change_password_status')){
+    if (heckPassword_('change_old_pass','change_old_password_status')){
       var prev_user_val = document.getElementById("username").value;
       var prev_password = document.getElementById("change_old_pass").value;
       var password = document.getElementById("change_pass").value;
