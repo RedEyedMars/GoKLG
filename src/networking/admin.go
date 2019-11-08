@@ -15,16 +15,10 @@ func SetupAdminCommands(registry *ClientRegistry) {
 	if adminCommands == nil {
 		adminCommands = make(map[string]events.Event)
 		adminCommands["exit"] = &events.Function{Name: "Admin!Exit", Function: func() { Shutdown <- true }}
-		adminCommands["report"] = &events.Function{Name: "Admin!Report", Function: databasing.MakeAdminFunc(1,
-			func(args ...string) {
-				result := <-databasing.RequestReport(args[0])
-				fmt.Println(result)
-			})}
-		adminCommands["report_oct"] = &events.Function{Name: "Admin!Report", Function: databasing.MakeAdminFunc(0,
-			func(args ...string) {
-				result := <-databasing.RequestOctoberReport()
-				fmt.Println(result)
-			})}
+		adminCommands["report_oct"] = &events.Function{Name: "Admin!Report", Function: func() {
+			result := <-databasing.RequestOctoberReport()
+			fmt.Println(result)
+		}}
 		/*adminCommands["addMember"] = &events.Function{Name: "Admin!AddMember", Function: func() {
 			if adminArgs != nil {
 				memberIp := adminArgs[0]
