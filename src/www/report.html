@@ -8,7 +8,16 @@
 var conn;
 </script>
 <script type="text/javascript">
-
+<style>
+table:report {
+  border: 2px;
+  border-style:solid;
+}
+table:report td{
+  border: 1px;
+  border-style:solid;
+}
+</style>
 window.onload = function () {
   if (window["WebSocket"]) {
     conn = new WebSocket("ws://" + document.location.host + "/ws");
