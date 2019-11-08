@@ -92,12 +92,12 @@ func InsertActivity(name string) chan bool {
 	}
 	return response
 }
-func LogActivity(userId int64, activityName string, ts time.Time) <-chan bool {
+func LogActivity(userName string, activityName string, ts time.Time) <-chan bool {
 	response := make(chan bool, 1)
 	go func() {
-
-		if user := UsersById[userId]; user == nil {
-			user = <-RequestUser("ById", userId)
+		user := Users[userName]
+		if user == nil {
+			user = <-RequestUser("ByName", userName)
 			if user == nil {
 				response <- false
 				return
@@ -110,7 +110,7 @@ func LogActivity(userId int64, activityName string, ts time.Time) <-chan bool {
 		}
 		actions <- &DBActionResponse{
 			exec: "Activities_LogActivity",
-			args: []interface{}{userId, activity.ID, ts},
+			args: []interface{}{user.ID, activity.ID, ts},
 			chl:  response,
 		}
 	}()
