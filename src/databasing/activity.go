@@ -227,5 +227,5 @@ func parseReport(rows *sql.Rows) string {
 	if err := rows.Scan(&username, &activityname, &amount, &first_occurrence, &last_occurrence); err != nil {
 		log.Fatalf(" databasing.activities.Parse: Error: %s", err)
 	}
-	return fmt.Sprintf(`<tr style="border:1px;border-style:solid><td>%s</td><td>%s</td><td>%d</td><td>%s</td><td>%s</td><td></tr>`, username, activityname, amount, first_occurrence.Format("2006-01-02 15:04:05"), last_occurrence.Format("2006-01-02 15:04:05"))
+	return fmt.Sprintf(`<tr style="border:1px;border-style:solid"><td>%s</td><td>%s</td><td>%d</td><td>%s</td><td>%s</td><td></tr>`, username, activityname, amount, first_occurrence.Format("2006-01-02 15:04:05"), last_occurrence.Format("2006-01-02 15:04:05"))
 }
