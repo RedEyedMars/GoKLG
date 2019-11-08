@@ -195,7 +195,7 @@ func RequestReport(month string) <-chan string {
 				assembler: parseReport,
 			},
 		}
-		ret := `<table style="border:1px;border-collapse:collapse;"><tr><th>user_name</th><th>activity_name</th><th>amount</th><th>first_occurrence</th><th>last_occurrence</th></tr>`
+		ret := `<table style="border:2px;border-style:solid"><tr><th>user_name</th><th>activity_name</th><th>amount</th><th>first_occurrence</th><th>last_occurrence</th></tr>`
 		for row := range response {
 			ret += row
 		}
@@ -227,5 +227,5 @@ func parseReport(rows *sql.Rows) string {
 	if err := rows.Scan(&username, &activityname, &amount, &first_occurrence, &last_occurrence); err != nil {
 		log.Fatalf(" databasing.activities.Parse: Error: %s", err)
 	}
-	return fmt.Sprintf("<tr><td>%s</td><td>%s</td><td>%d</td><td>%s</td><td>%s</td><td><tr>", username, activityname, amount, first_occurrence.Format("2006-01-02 15:04:05"), last_occurrence.Format("2006-01-02 15:04:05"))
+	return fmt.Sprintf(`<tr style="border:1px;border-style:solid><td>%s</td><td>%s</td><td>%d</td><td>%s</td><td>%s</td><td></tr>`, username, activityname, amount, first_occurrence.Format("2006-01-02 15:04:05"), last_occurrence.Format("2006-01-02 15:04:05"))
 }
