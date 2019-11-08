@@ -21,7 +21,7 @@ function change_profile() {
 };
 
 function change_user_name() {
-    if (checkUsername_('change_username','change_username_status')&&checkPassword_('change_pass','change_password_status')){
+    if (checkUsername_('change_username','change_username_status')){
       var prev_user_val = document.getElementById("username").value;
       var prev_password = document.getElementById("change_old_pass").value;
       var password = document.getElementById("change_pass").value;
@@ -31,7 +31,7 @@ function change_user_name() {
 };
 
 function change_password() {
-    if (checkUsername_('change_username','change_username_status')&&checkPassword_('change_pass','change_password_status')){
+    if (checkPassword_('change_pass','change_password_status')){
       var prev_user_val = document.getElementById("username").value;
       var prev_password = document.getElementById("change_old_pass").value;
       var password = document.getElementById("change_pass").value;
