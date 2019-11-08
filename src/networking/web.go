@@ -109,7 +109,7 @@ func StartWebClient(toClose chan bool) {
 		}
 		http.ServeFile(w, r, "src/www/lib/forge-sha256-master/build/forge-sha256.min.js")
 	})
-	handleJs("/login.js", "/messaging.js", "/contact_me.js", "/main.js")
+	handleJs("/login.js", "/messaging.js", "/contact_me.js", "/main.js", "/change.js")
 	handleImgs("/Pending.png", "/Fail.png", "/Success.png", "/Signup.png", "/Login.png")
 
 	srv := &http.Server{Addr: ":8080"}
