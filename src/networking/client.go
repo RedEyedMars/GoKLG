@@ -198,13 +198,13 @@ func (c *Client) handleMessages(registry *ClientRegistry) {
 			if cmd, ok := commands[command]; ok {
 				events.GoFuncEvent("client."+command, func() {
 					cmd(c, msg, user)
-				})
-				events.GoFuncEvent("client.log_activity:"+command, func() {
-					if c.id != -1 {
-						databasing.LogActivity(command, c.name, time.Now())
-					} else if user != nil {
-						databasing.LogActivity(command, string(user), time.Now())
-					}
+					events.FuncEvent("client.log_activity:"+command, func() {
+						if c.id != -1 {
+							databasing.LogActivity(command, c.name, time.Now())
+						} else if user != nil {
+							databasing.LogActivity(command, string(user), time.Now())
+						}
+					})
 				})
 			} else {
 				log.Printf("networking.client.handleMessages: Command not found: %s", command)
