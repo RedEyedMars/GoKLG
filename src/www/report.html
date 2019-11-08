@@ -19,7 +19,7 @@ window.onload = function () {
     conn.onmessage = function (evt) {
         var result = /\{([^\{\};:?]+)(:)?([a-zA-Z0-9_-]+)?\}(.*)/g.exec(evt.data);
         console.log(result);
-        document.getElementById("output").innerHTML = createTextLinks_(result[4])
+        document.getElementById("output").innerHTML = result[4]
     };
   } else {
     console.log("Your browser does not support WebSockets.");
@@ -29,7 +29,7 @@ window.onload = function () {
 </script>
 </head>
 <body>
-<select id="input" onchange="conn.send('{report}'+document.getElementById('input').value);" >
+<select id="input" onchange="conn.send('{report:'+document.getElementById('input').value+'}');" >
   <option value="January">January</option>
   <option value="February">February</option>
   <option value="March">March</option>
