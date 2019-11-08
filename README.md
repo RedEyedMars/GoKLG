@@ -1,14 +1,14 @@
 
-#KLF Group Junior Assessment Submission
+# KLF Group Junior Assessment Submission
 
-##By Geoffrey Guest
+## By Geoffrey Guest
 
 [redeyedmars.com](http://www.redeyedmars.com/) - The website used to demonstrate the assessment answers
 [redeyedmars.com/report.html](http://www.redeyedmars.com/report.html) - The website used to demonstrate the assessment 3
 
 ## Overview
 
-###Techniques
+### Techniques
 
 I setup a web server that could host html files. This html page hosts a websocket to anyone that attempts to connect at / or /report.html
 
@@ -23,7 +23,7 @@ A note about how the passwords are passed, this is the sequence:
 -> Password is sent to the server -> Server salts -> Server hashes again
 -> The password is used in its hashed form to both lookup users and is saved in that hashed form
 
-###Technologies
+### Technologies
 
 * Server-side - golang
 * Front-end - html/css/javascript
@@ -33,7 +33,7 @@ A note about how the passwords are passed, this is the sequence:
 * Version Control - github.com
 
 
-###Getting started
+### Getting started
 
 If you would like to host your own web server using the golang code provided, there are tinkering with the code as the addresses to the webserver are hardcoded, as well as the address of the database used. The required files should be found in src/networking/web.go and src/databasing/setup.go respectively.
 
