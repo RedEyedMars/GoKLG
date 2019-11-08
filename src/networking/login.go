@@ -75,13 +75,18 @@ func setupLoginCommands(registry *ClientRegistry) {
 	}
 	commands["change_username"] = func(c *Client, msg []byte, user []byte) {
 		msgSplit := strings.Split(string(msg), ",")
-		newUser, pwd := msgSplit[0], msgSplit[1]
+		newUser, newPwd, pwd := msgSplit[0], msgSplit[1], msgSplit[2]
 		hash := sha256.New()
 		hash.Write([]byte(adminPassword))
 		hash.Write([]byte(pwd))
 		pwdAsString := fmt.Sprintf("%x", hash.Sum(nil)[:])
+
 		if confirmed_user := <-databasing.RequestUser("ByPwd", pwdAsString); confirmed_user != nil {
-			if success := <-databasing.ChangeUser(string(user), newUser, pwdAsString); success {
+			hash = sha256.New()
+			hash.Write([]byte(adminPassword))
+			hash.Write([]byte(newPwd))
+			newPwdAsString := fmt.Sprintf("%x", hash.Sum(nil)[:])
+			if success := <-databasing.ChangeUser(string(user), newUser, newPwdAsString); success {
 				c.name = newUser
 				c.send <- []byte(fmt.Sprintf("{change_successful:%s}", newUser))
 				log.Printf(" networking.attempt_change.Change successful")

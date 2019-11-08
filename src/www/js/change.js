@@ -26,7 +26,7 @@ function change_user_name() {
       var prev_password = document.getElementById("change_old_pass").value;
       var password = document.getElementById("change_pass").value;
       var user_val = document.getElementById("change_username").value;
-      conn.send("{change_username:"+prev_user_val+"}"+user_val+","+encrypt_(prev_password + prev_user_val));
+      conn.send("{change_username:"+prev_user_val+"}"+user_val+","+encrypt_(prev_password + user_val)+","+encrypt_(prev_password + prev_user_val));
     }
 };
 

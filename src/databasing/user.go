@@ -150,7 +150,7 @@ func InsertUser(name string, pwd string) <-chan *User {
 
 	return response
 }
-func ChangeUser(user string, newUser string, new_pwd string) <-chan bool {
+func ChangeUser(user string, newUser string, newPwd string) <-chan bool {
 	response := make(chan bool, 1)
 	go func() {
 		id := getIdByUsername(user)
@@ -169,7 +169,7 @@ func ChangeUser(user string, newUser string, new_pwd string) <-chan bool {
 		}
 		actions <- &DBActionResponse{
 			exec: "Users_ChangePwd",
-			args: []interface{}{new_pwd, id},
+			args: []interface{}{newPwd, id},
 			chl:  responseUpdatePwd,
 		}
 		<-responseUpdateUser
