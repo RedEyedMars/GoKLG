@@ -24,9 +24,10 @@ function change_accounts() {
 commands["change_successful"] = function(msg,user){
 
   username = document.getElementById("displayusername");
-  username.innerHTML = document.getElementById("change_username").value;
+  username.innerHTML = user;
 
   document.getElementById("change_pass").value = "";
+  document.getElementById("change_old_pass").value = "";
   document.getElementById("change_username").value = "";
 };
 

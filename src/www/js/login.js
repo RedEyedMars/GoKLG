@@ -42,7 +42,7 @@ function login(username_val){
 function logout(){
   document.getElementById("popup").style.display = "block";
   document.getElementById("site_div").style.display = "none";
-
+  current_page.style.display = "none";
 }
 function signin_() {
     if (checkUsername_()&&checkPassword_()){
