@@ -138,6 +138,8 @@ func StartDatabase(Shutdown chan bool) {
 		events.FuncEvent("databasing.SetupEmails", func() { SetupEmails(db) })
 		events.FuncEvent("databasing.SetupActivities", func() { SetupActivities(db) })
 
+		events.GoFuncEvent("databasing.LoadActivities", func() { LoadAllActivities() })
+
 		events.FuncEvent("databasing.StartMessageListening", func() { StartMessageListening(db) })
 
 	}

@@ -54,8 +54,11 @@ commands["change_request_granted"] = function(msg,user){
   document.getElementById("change_old_pwd_div").style.display = "none";
   document.getElementById("change_user_div").style.display = "block";
   document.getElementById("change_pwd_div").style.display = "block";
+
 };
 commands["change_request_denied"] = function(msg,user){
+
+    document.getElementById("change_old_pass").value = "";
     const status = document.getElementById("account_change_status");
     while (status.firstChild) {
       status.removeChild(status.firstChild);
@@ -71,10 +74,12 @@ commands["change_successful"] = function(msg,user){
   username.innerHTML = user;
 
   document.getElementById("change_pass").value = "";
+  document.getElementById("change_pass_0").value = "";
   document.getElementById("change_old_pass").value = "";
   document.getElementById("change_username").value = "";
 };
 commands["change_failed"] = function(msg,user){
+  document.getElementById("change_old_pass").value = "";
   const status = document.getElementById("account_change_status");
   while (status.firstChild) {
     status.removeChild(status.firstChild);

@@ -60,6 +60,16 @@ func AddActivityToMaps(activity *Activity) {
 	Activities[activity.Name] = activity
 }
 
+func LoadAllActivities() {
+	for activity := range RequestActivity("All") {
+		doNothing(activity)
+	}
+}
+
+func doNothing(_ interface{}) {
+
+}
+
 func SetupActivities(db *sql.DB) {
 	Activities = make(map[string]*Activity)
 	ActivityById = make(map[int64]*Activity)
