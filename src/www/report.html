@@ -38,6 +38,18 @@ window.onload = function () {
 </script>
 </head>
 <body>
+<p> The following SQL Select call is being performed (the given ? is the index of the month) <br>
+  &nbsp;&nbsp;SELECT</br>
+	&nbsp;&nbsp;&nbsp;&nbsp;user.name as user_name,</br>
+  &nbsp;&nbsp;&nbsp;&nbsp;activity.name as activity_name,</br>
+  &nbsp;&nbsp;&nbsp;&nbsp;COUNT(occurrence) as amount,</br>
+  &nbsp;&nbsp;&nbsp;&nbsp;MIN(occurrence) as first_occurrence,</br>
+  &nbsp;&nbsp;&nbsp;&nbsp;MAX(occurrence) as last_occurrence</br>
+  &nbsp;&nbsp;&nbsp;FROM user_activity</br>
+  &nbsp;&nbsp;&nbsp;&nbsp;INNER JOIN user ON user.id=user_id</br>
+	&nbsp;&nbsp;&nbsp;&nbsp;INNER JOIN activity ON activity.id=activity_id</br>
+	&nbsp;&nbsp;&nbsp;WHERE MONTH(occurrence)=?</br>
+  &nbsp;&nbsp;&nbsp;GROUP BY user.name,activity.name;</br> </p>
 <select id="input" onchange="conn.send('{report:'+document.getElementById('input').value+'}');" >
   <option value="January">January</option>
   <option value="February">February</option>
