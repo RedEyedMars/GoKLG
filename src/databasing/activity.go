@@ -186,7 +186,7 @@ func RequestReport(month string) <-chan string {
 
 	response2 := make(chan string, 1)
 	go func() {
-		response := make(chan string, 1)
+		response := make(chan string, 160)
 		queries <- &DBQueryResponse{
 			query: "Activities_Report",
 			args:  []interface{}{month_i},
@@ -203,6 +203,7 @@ func RequestReport(month string) <-chan string {
 		}
 		ret += "____________________________________________________________________________________________________"
 		response2 <- ret
+		close(response2)
 	}()
 	return response2
 }
