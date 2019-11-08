@@ -47,12 +47,14 @@ func MainStart(name string, f func(chan bool), adminCommand func(string) bool, e
 		for {
 			reader := bufio.NewReader(os.Stdin)
 			text, _ := reader.ReadString('\n')
-			if text[:4] == "exit" {
-				Shutdown <- true
-				break
-			} else {
-				log.Printf(text)
-				adminCommand(text)
+			if len(text) > 4 {
+				if text[:4] == "exit" {
+					Shutdown <- true
+					break
+				} else {
+					log.Printf(text)
+					adminCommand(text)
+				}
 			}
 		}
 	}()

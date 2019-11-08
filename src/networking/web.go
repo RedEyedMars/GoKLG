@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"time"
 
 	"../events"
 )
@@ -143,8 +142,10 @@ func StartWebClient(toClose chan bool) {
 			log.Fatalf("networking.web.Shutdown:%s", err)
 		}
 	}
-	go func() {
-		time.Sleep(72 * time.Hour)
-		close(Shutdown)
-	}()
+	/*
+		go func() {
+			time.Sleep(72 * time.Hour)
+			close(Shutdown)
+		}()
+	*/
 }
