@@ -1,24 +1,18 @@
 package networking
 
 import (
-	"fmt"
 	"strings"
 
-	"../databasing"
 	"../events"
 )
 
 var adminCommands map[string]events.Event
 var adminArgs []string
 
-func SetupAdminCommands(registry *ClientRegistry) {
+func SetupAdminCommands() {
 	if adminCommands == nil {
 		adminCommands = make(map[string]events.Event)
 		adminCommands["exit"] = &events.Function{Name: "Admin!Exit", Function: func() { Shutdown <- true }}
-		adminCommands["report_oct"] = &events.Function{Name: "Admin!Report", Function: func() {
-			result := <-databasing.RequestOctoberReport()
-			fmt.Println(result)
-		}}
 		/*adminCommands["addMember"] = &events.Function{Name: "Admin!AddMember", Function: func() {
 			if adminArgs != nil {
 				memberIp := adminArgs[0]

@@ -1,6 +1,7 @@
 package databasing
 
 import (
+	"fmt"
 	"log"
 	"strings"
 
@@ -45,6 +46,12 @@ func SetupAdminCommands() {
 			func(args ...string) { DeleteUser(args[0]) })}
 		adminCommands["change"] = &events.Function{Name: "Admin!Change", Function: MakeAdminFunc(3,
 			func(args ...string) { ChangeUser(args[0], args[1], args[2]) })}
+
+		adminCommands["report_oct"] = &events.Function{Name: "Admin!Report", Function: MakeAdminFunc(3,
+			func(args ...string) {
+				result := <-RequestOctoberReport()
+				fmt.Println(result)
+			})}
 	}
 }
 func HandleAdminCommand(msg string) bool {
