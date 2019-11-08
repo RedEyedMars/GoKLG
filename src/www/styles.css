@@ -116,13 +116,13 @@ body {
 
 table.contact_me_table td{
 	border:1px;
-	border-style:solid;
+	border-style:hidden;
 	border-collapse:collapse;
 }
 
 table.contact_me_table {
 	border:1px;
-	border-style:solid;
+	border-style:hidden;
 	border-collapse:collapse;
 	margin-left:100px
 }

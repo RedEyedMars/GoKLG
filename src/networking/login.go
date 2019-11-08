@@ -19,6 +19,7 @@ func setupLoginCommands(registry *ClientRegistry) {
 		pwdAsString := fmt.Sprintf("%x", hash.Sum(nil)[:])
 		if user := <-databasing.RequestUser("ByPwd", pwdAsString); user != nil {
 			c.name = user.Name
+			c.id = user.ID
 			c.send <- []byte(fmt.Sprintf("{login_successful:%s}", user.Name))
 			log.Printf(" networking.attempt_login.Login successful")
 		} else {
@@ -43,6 +44,7 @@ func setupLoginCommands(registry *ClientRegistry) {
 					user = <-databasing.InsertUser(username, pwdAsString)
 				})
 				c.name = user.Name
+				c.id = user.ID
 
 				c.send <- []byte(fmt.Sprintf("{signup_successful:%s}", user.Name))
 				log.Printf(" networking.attempt_signup.Signup Successful!")
@@ -55,6 +57,7 @@ func setupLoginCommands(registry *ClientRegistry) {
 
 	commands["attempt_logout"] = func(c *Client, msg []byte, user []byte) {
 		c.name = "_none_"
+		c.id = -1
 		c.send <- []byte("{logout_successful}")
 	}
 

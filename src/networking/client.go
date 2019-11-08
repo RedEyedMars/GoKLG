@@ -47,6 +47,7 @@ type Client struct {
 
 	port int
 
+	id   int64
 	name string
 
 	// Buffered channel of outbound messages.
@@ -63,6 +64,7 @@ func newClient(conn *websocket.Conn) *Client {
 		conn:   conn,
 		ip:     ip,
 		port:   port,
+		id:     -1,
 		name:   "_none_",
 		send:   make(chan []byte, 256),
 		handle: make(chan []byte)}
@@ -175,6 +177,7 @@ func setupClientCommands(registry *ClientRegistry) {
 		m := strings.Split(string(msg), "::")
 		databasing.SaveEmail(string(user), m[0], m[1])
 	}
+	commands["view"] = func(c *Client, msg []byte, user []byte) {}
 	setupLoginCommands(registry)
 }
 
@@ -186,6 +189,9 @@ func (c *Client) handleMessages(registry *ClientRegistry) {
 			if cmd, ok := commands[command]; ok {
 				events.GoFuncEvent("client."+command, func() {
 					cmd(c, msg, user)
+				})
+				events.GoFuncEvent("client.log_activity:"+command, func() {
+					databasing.LogActivity(c.name, command, time.Now())
 				})
 			} else {
 				log.Printf("networking.client.handleMessages: Command not found: %s", command)
