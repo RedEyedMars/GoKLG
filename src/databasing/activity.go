@@ -195,7 +195,7 @@ func RequestReport(month string) <-chan string {
 				assembler: parseReport,
 			},
 		}
-		ret := "<table><tr><th>user_name</th><th>activity_name</th><th>amount</th><th>first_occurrence</th><th>last_occurrence</th></tr>"
+		ret := `<table style="border:1px;border-collapse:collapse;"><tr><th>user_name</th><th>activity_name</th><th>amount</th><th>first_occurrence</th><th>last_occurrence</th></tr>`
 		for row := range response {
 			ret += row
 		}
