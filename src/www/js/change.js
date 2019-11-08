@@ -36,7 +36,7 @@ function change_password() {
       var prev_password = document.getElementById("change_old_pass").value;
       var password = document.getElementById("change_pass").value;
       var user_val = document.getElementById("change_username").value;
-      if(password == document.getElementById("change_pass_0").value;){
+      if(password == document.getElementById("change_pass_0").value){
         conn.send("{change_password:"+prev_user_val+"}"+encrypt_(password + user_val)+","+encrypt_(prev_password + prev_user_val));
       } else {
         const status = document.getElementById("account_change_status");
