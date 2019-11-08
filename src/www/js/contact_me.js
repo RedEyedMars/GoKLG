@@ -5,6 +5,7 @@ function submit_contact_me(){
 
 
 function open_contact_me(){
+  conn.send("{view}contact_me");
   current_page.style.display = "none";
   current_page = document.getElementById("contact_me");
   current_page.style.display = "block";

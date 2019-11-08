@@ -32,6 +32,7 @@ function login(username_val){
   document.getElementById("popup").style.display = "none";
   document.getElementById("site_div").style.display = "block";
 
+  conn.send("{view}main_page");
   current_page = document.getElementById("main_page");
   current_page.style.display = "block";
 
