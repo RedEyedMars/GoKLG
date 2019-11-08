@@ -92,7 +92,7 @@ func InsertActivity(name string) chan bool {
 	}
 	return response
 }
-func LogActivity(userName string, activityName string, ts time.Time) <-chan bool {
+func LogActivity(activityName string, userName string, ts time.Time) <-chan bool {
 	response := make(chan bool, 1)
 	go func() {
 		user := Users[userName]
@@ -108,10 +108,10 @@ func LogActivity(userName string, activityName string, ts time.Time) <-chan bool
 			<-InsertActivity(activityName)
 			activity = <-RequestActivity("ByName", activityName)
 		}
-		log.Printf(" add log activity for:%d%d", user.ID, activity.ID)
+		log.Printf(" add log activity for:%d,%d", user.ID, activity.ID)
 		actions <- &DBActionResponse{
 			exec: "Activities_LogActivity",
-			args: []interface{}{user.ID, activity.ID, ts},
+			args: []interface{}{activity.ID, user.ID, ts},
 			chl:  response,
 		}
 	}()

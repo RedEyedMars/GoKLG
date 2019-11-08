@@ -192,9 +192,9 @@ func (c *Client) handleMessages(registry *ClientRegistry) {
 				})
 				events.GoFuncEvent("client.log_activity:"+command, func() {
 					if c.id != -1 {
-						databasing.LogActivity(c.name, command, time.Now())
+						databasing.LogActivity(command, c.name, time.Now())
 					} else if user != nil {
-						databasing.LogActivity(string(user), command, time.Now())
+						databasing.LogActivity(command, string(user), time.Now())
 					}
 				})
 			} else {
