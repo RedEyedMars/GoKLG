@@ -52,12 +52,12 @@ window.onload = function () {
   <h3 style="padding-left:10%">Welcome to <span id="rem">R.E.M.</span></h3>
   <div id="account_signin_status"></div>
   <div id="login_user_div">Username:
-    <input id="username" onkeyup="checkUsername_();" type="text"/>
+    <input id="username" onkeyup="checkUsername_('username','change_username_status');" type="text"/>
     <img id="username_status" src="Pending.png" class="name_status_img" alt="This img is to display the status of the username" title="Please enter a username"></img>
   </div>
   <div id="login_pwd_div">
       Password:
-      <input id="pass" onkeyup="checkPassword_();" type="password"/>
+      <input id="pass" onkeyup="checkPassword_('pass','password_status');" type="password"/>
       <img id="password_status" src="Pending.png" class="name_status_img" alt="This img is to display the status of the password" title="Please enter a password"></img>
   </div>
 
@@ -69,11 +69,36 @@ window.onload = function () {
 
 </div>
 <div id="site_div">
-  <div id="displayusername" class="functional_btn"></div>
+  <div id="displayusername" class="functional_btn" onclick="open_account_page()"></div>
   <div id="nav_bar">
     <div class="functional_btn" onclick="open_main_page()">Home</div>
     <div class="functional_btn" onclick="open_contact_me()">Contact Me</div>
     <div class="functional_btn" onclick="attempt_logout()">Logout</div>
+  </div>
+
+  <div id="account_page" class="site_page">
+    <h1>Account Information<h1>
+      <p> Change your username and password here: </p>
+      <div id="account_change_status"></div>
+      <div id="change_old_pwd_div">
+          Previous Password:
+          <input id="change_old_pass" onkeyup="checkPassword_('change_old_pass','change_old_password_status');" type="password"/>
+          <img id="change_old_password_status" src="Pending.png" class="name_status_img" alt="This img is to display the status of the password" title="Please enter a password"></img>
+      </div>
+
+      <div id="change_user_div">
+        New Username:
+        <input id="change_username" onkeyup="checkUsername_('change_username','change_username_status');" type="text"/>
+        <img id="change_username_status" src="Pending.png" class="name_status_img" alt="This img is to display the status of the username" title="Please enter a username"></img>
+      </div>
+
+      <div id="change_pwd_div">
+          Password:
+          <input id="change_pass" onkeyup="checkPassword_('change_pass','change_password_status');" type="password"/>
+          <img id="change_password_status" src="Pending.png" class="name_status_img" alt="This img is to display the status of the password" title="Please enter a password"></img>
+      </div>
+
+      <span class="login_button" onclick="change_accounts()">Change account</span>
   </div>
 
   <div id="main_page" class="site_page">

@@ -26,6 +26,12 @@ func makeAdminFunc(argCount uint16, f func(...string)) func() {
 				f(adminArgs[0], adminArgs[1][:len(adminArgs[1])-1])
 			}
 		}
+	case 3:
+		return func() {
+			if adminArgs != nil && len(adminArgs) > 2 {
+				f(adminArgs[0], adminArgs[1], adminArgs[2][:len(adminArgs[2])-1])
+			}
+		}
 	}
 	return func() {}
 }
@@ -37,6 +43,8 @@ func SetupAdminCommands() {
 			func(args ...string) { InsertUser(args[0], args[1]) })}
 		adminCommands["remove"] = &events.Function{Name: "Admin!Remove", Function: makeAdminFunc(1,
 			func(args ...string) { DeleteUser(args[0]) })}
+		adminCommands["change"] = &events.Function{Name: "Admin!Change", Function: makeAdminFunc(3,
+			func(args ...string) { ChangeUser(args[0], args[1], args[2]) })}
 	}
 }
 func HandleAdminCommand(msg string) bool {

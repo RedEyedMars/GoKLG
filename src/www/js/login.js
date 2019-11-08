@@ -1,37 +1,37 @@
-function checkUsername_(){
-  var username_val = document.getElementById("username").value;
+function checkUsername_(usernameNameId,usernameStatusId){
+  var username_val = document.getElementById(usernameNameId).value;
   if(/^[a-z0-9_-]{3,16}$/igm.test(username_val)){
-    document.getElementById("username_status").src = "Success.png";
-    document.getElementById("username_status").title = 'That username looks good!';
+    document.getElementById(usernameStatusId).src = "Success.png";
+    document.getElementById(usernameStatusId).title = 'That username looks good!';
     return true;
   } else {
     if(username_val.length<3){
-      document.getElementById("username_status").src = "Pending.png";
-      document.getElementById("username_status").title = "Usernames must be greater than 3 characters long!";
+      document.getElementById(usernameStatusId).src = "Pending.png";
+      document.getElementById(usernameStatusId).title = "Usernames must be greater than 3 characters long!";
     } else if(username_val.length>=16){
-      document.getElementById("username_status").src = "Fail.png";
-      document.getElementById("username_status").title = "Usernames must be less than 16 characters long!";
+      document.getElementById(usernameStatusId).src = "Fail.png";
+      document.getElementById(usernameStatusId).title = "Usernames must be less than 16 characters long!";
     } else if(/^.*\s.*$/igm.test(username_val)){
-      document.getElementById("username_status").src = "Fail.png";
-      document.getElementById("username_status").title = "Usernames must have no spaces in them!";
+      document.getElementById(usernameStatusId).src = "Fail.png";
+      document.getElementById(usernameStatusId).title = "Usernames must have no spaces in them!";
     } else if(/^.*[!@#$%^&*+=\(\)\[\]\{\}:;,\.\'\`~<>\/\\].*$/igm.test(username_val)){
-      document.getElementById("username_status").src = "Fail.png";
-      document.getElementById("username_status").title = "Usernames must have no special characters in them!";
+      document.getElementById(usernameStatusId).src = "Fail.png";
+      document.getElementById(usernameStatusId).title = "Usernames must have no special characters in them!";
     } else {
-      document.getElementById("username_status").src = "Fail.png";
-      document.getElementById("username_status").title = "Your username is not valid!";
+      document.getElementById(usernameStatusId).src = "Fail.png";
+      document.getElementById(usernameStatusId).title = "Your username is not valid!";
     }
     return false;
   }
 };
-function checkPassword_(){
+function checkPassword_(passwordNameId,passwordStatusId){
   return true;
 }
 
 function login(username_val){
   document.getElementById("popup").style.display = "none";
   document.getElementById("site_div").style.display = "block";
-  
+
   current_page = document.getElementById("main_page");
   current_page.style.display = "block";
 
@@ -41,7 +41,7 @@ function login(username_val){
 }
 function logout(){
   document.getElementById("popup").style.display = "block";
-  document.getElementById("chat_div").style.display = "none";
+  document.getElementById("site_div").style.display = "none";
 
 }
 function signin_() {
@@ -55,7 +55,7 @@ function signup_() {
     if (checkUsername_()&&checkPassword_()){
       var password = document.getElementById("pass").value;
       var user_val = document.getElementById("username").value;
-      conn.send("{attempt_signup}"+user_val+","+encrypt_(password+user_val));
+      conn.send("{attempt_signup:"+user_val+"}"+encrypt_(password+user_val));
     }
 };
 function attempt_logout(){

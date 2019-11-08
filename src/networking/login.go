@@ -27,8 +27,7 @@ func setupLoginCommands(registry *ClientRegistry) {
 		}
 	}
 	commands["attempt_signup"] = func(c *Client, msg []byte, user []byte) {
-		split := strings.Split(string(msg), ",")
-		username, pwd := split[0], split[1]
+		username := string(user)
 		if user := <-databasing.RequestUser("ByName", username); user != nil {
 			c.send <- []byte("{signup_failed}Username taken!")
 		} else {
@@ -36,7 +35,7 @@ func setupLoginCommands(registry *ClientRegistry) {
 			log.Printf(" networking.attempt_signup.No user found; good!")
 			hash := sha256.New()
 			hash.Write([]byte(adminPassword))
-			hash.Write([]byte(pwd))
+			hash.Write(msg) //Add Password here
 			pwdAsString := fmt.Sprintf("%x", hash.Sum(nil)[:])
 			if user := <-databasing.RequestUser("ByPwd", pwdAsString); user == nil {
 
@@ -57,5 +56,32 @@ func setupLoginCommands(registry *ClientRegistry) {
 	commands["attempt_logout"] = func(c *Client, msg []byte, user []byte) {
 		c.name = "_none_"
 		c.send <- []byte("{logout_successful}")
+	}
+
+	commands["attempt_change"] = func(c *Client, msg []byte, user []byte) {
+		msgSplit := strings.Split(string(msg), ",")
+		newUser, oldPwd, pwd := msgSplit[0], msgSplit[1], msgSplit[2]
+		hash := sha256.New()
+		hash.Write([]byte(adminPassword))
+		hash.Write([]byte(pwd))
+		pwdAsString := fmt.Sprintf("%x", hash.Sum(nil)[:])
+
+		hash = sha256.New()
+		hash.Write([]byte(adminPassword))
+		hash.Write([]byte(oldPwd))
+		oldPwdAsString := fmt.Sprintf("%x", hash.Sum(nil)[:])
+		if confirmed_user := <-databasing.RequestUser("ByPwd", oldPwdAsString); confirmed_user != nil {
+			if success := <-databasing.ChangeUser(string(user), newUser, pwdAsString); success {
+				c.name = newUser
+				c.send <- []byte(fmt.Sprintf("{change_successful:%s}", newUser))
+				log.Printf(" networking.attempt_change.Change successful")
+			} else {
+				c.send <- []byte("{change_failed}No matching username was found for:" + string(user) + "!")
+				log.Printf(" networking.attempt_change.Change failed")
+			}
+		} else {
+			c.send <- []byte("{change_failed}No matching username was found for:" + string(user) + "!")
+			log.Printf(" networking.attempt_change.Change failed")
+		}
 	}
 }

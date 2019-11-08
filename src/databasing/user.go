@@ -87,6 +87,9 @@ func SetupUsers(db *sql.DB) {
 	defineQuery(db, "Users_AddPwd", `INSERT INTO pwds VALUES(?,?);`)
 	defineQuery(db, "Users_Remove", `DELETE FROM user WHERE name = ?;`)
 
+	defineQuery(db, "Users_ChangeUser", `UPDATE user SET name = ? WHERE id = ?;`)
+	defineQuery(db, "Users_ChangePwd", `UPDATE pwds SET pwd = ? WHERE id = ?;`)
+
 	defineQuery(db, "Pwds_Remove", `DELETE FROM pwds WHERE id=?;`)
 	defineQuery(db, "UserActivity_Remove", `DELETE FROM user_activity WHERE user_id=?;`)
 }
@@ -147,24 +150,46 @@ func InsertUser(name string, pwd string) <-chan *User {
 
 	return response
 }
+func ChangeUser(user string, newUser string, new_pwd string) <-chan bool {
+	response := make(chan bool, 1)
+	go func() {
+		id := getIdByUsername(user)
+		if id == -1 {
+			response <- false
+			return
+		}
+
+		responseUpdateUser := make(chan bool, 1)
+		responseUpdatePwd := make(chan bool, 1)
+
+		actions <- &DBActionResponse{
+			exec: "Users_ChangeUser",
+			args: []interface{}{newUser, id},
+			chl:  responseUpdateUser,
+		}
+		actions <- &DBActionResponse{
+			exec: "Users_ChangePwd",
+			args: []interface{}{new_pwd, id},
+			chl:  responseUpdatePwd,
+		}
+		<-responseUpdateUser
+		<-responseUpdatePwd
+
+		UsersById[id].Name = user
+
+		response <- true
+	}()
+	return response
+}
 func DeleteUser(name string) <-chan bool {
 	response := make(chan bool, 1)
 	go func() {
-		var id int64
-		if user := Users[name]; user != nil {
-			id = user.ID
-		} else {
-			responseUser := make(chan int64, 1)
-			queries <- &DBQueryResponse{
-				query: "UsersId_ByName",
-				args:  []interface{}{name},
-				sender: &DBUserIdResponse{
-					chl:       responseUser,
-					assembler: parseUserId,
-				},
-			}
-			id = <-responseUser
+		id := getIdByUsername(name)
+		if id == -1 {
+			response <- false
+			return
 		}
+
 		responseRemoveUser := make(chan bool, 1)
 		responseRemoveUserActivty := make(chan bool, 1)
 		responseRemovePwd := make(chan bool, 1)
@@ -193,6 +218,28 @@ func DeleteUser(name string) <-chan bool {
 	}()
 
 	return response
+}
+func getIdByUsername(name string) int64 {
+	var id int64
+	id = -1
+	if user := Users[name]; user != nil {
+		id = user.ID
+	} else {
+		responseUser := make(chan int64, 1)
+		queries <- &DBQueryResponse{
+			query: "UsersId_ByName",
+			args:  []interface{}{name},
+			sender: &DBUserIdResponse{
+				chl:       responseUser,
+				assembler: parseUserId,
+			},
+		}
+		select {
+		case new_id := <-responseUser:
+			id = new_id
+		}
+	}
+	return id
 }
 func parseUser(rows *sql.Rows) *User {
 	var (
