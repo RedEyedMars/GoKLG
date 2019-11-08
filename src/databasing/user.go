@@ -175,7 +175,9 @@ func ChangeUser(user string, newUser string, new_pwd string) <-chan bool {
 		<-responseUpdateUser
 		<-responseUpdatePwd
 
-		UsersById[id].Name = user
+		UsersById[id].Name = newUser
+		delete(Users, user)
+		Users[newUser] = UsersById[id]
 
 		response <- true
 	}()
