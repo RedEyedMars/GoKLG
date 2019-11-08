@@ -56,7 +56,7 @@ func setupLoginCommands(registry *ClientRegistry) {
 	}
 
 	commands["attempt_logout"] = func(c *Client, msg []byte, user []byte) {
-		c.name = "_none_"
+		c.name = "!none!"
 		c.id = -1
 		c.send <- []byte("{logout_successful}")
 	}

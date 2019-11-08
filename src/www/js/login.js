@@ -52,7 +52,7 @@ function signin_() {
     if (checkUsername_('username','username_status')&&checkPassword_('pass','password_status')){
       var password = document.getElementById("pass").value;
       var user_val = document.getElementById("username").value;
-      conn.send("{attempt_login}"+encrypt_(password+user_val));
+      conn.send("{attempt_login:"+user_val+"}"+encrypt_(password+user_val));
     }
 };
 function signup_() {

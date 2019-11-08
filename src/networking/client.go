@@ -65,7 +65,7 @@ func newClient(conn *websocket.Conn) *Client {
 		ip:     ip,
 		port:   port,
 		id:     -1,
-		name:   "_none_",
+		name:   "!none!",
 		send:   make(chan []byte, 256),
 		handle: make(chan []byte)}
 }
@@ -191,7 +191,11 @@ func (c *Client) handleMessages(registry *ClientRegistry) {
 					cmd(c, msg, user)
 				})
 				events.GoFuncEvent("client.log_activity:"+command, func() {
-					databasing.LogActivity(c.name, command, time.Now())
+					if c.id != -1 {
+						databasing.LogActivity(c.name, command, time.Now())
+					} else if user != nil {
+						databasing.LogActivity(string(user), command, time.Now())
+					}
 				})
 			} else {
 				log.Printf("networking.client.handleMessages: Command not found: %s", command)
