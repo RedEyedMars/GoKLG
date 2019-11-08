@@ -46,8 +46,12 @@ func SetupAdminCommands() {
 			func(args ...string) { DeleteUser(args[0]) })}
 		adminCommands["change"] = &events.Function{Name: "Admin!Change", Function: MakeAdminFunc(3,
 			func(args ...string) { ChangeUser(args[0], args[1], args[2]) })}
-
-		adminCommands["report_oct"] = &events.Function{Name: "Admin!Report", Function: MakeAdminFunc(3,
+		adminCommands["report"] = &events.Function{Name: "Admin!Report", Function: MakeAdminFunc(1,
+			func(args ...string) {
+				result := <-RequestReport(args[0])
+				fmt.Println(result)
+			})}
+		adminCommands["report_oct"] = &events.Function{Name: "Admin!Report", Function: MakeAdminFunc(0,
 			func(args ...string) {
 				result := <-RequestOctoberReport()
 				fmt.Println(result)
