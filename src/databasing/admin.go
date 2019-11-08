@@ -10,7 +10,7 @@ import (
 var adminCommands map[string]events.Event
 var adminArgs []string
 
-func makeAdminFunc(argCount uint16, f func(...string)) func() {
+func MakeAdminFunc(argCount uint16, f func(...string)) func() {
 	switch argCount {
 	case 0:
 		return func() { f() }
@@ -39,11 +39,11 @@ func SetupAdminCommands() {
 	if adminCommands == nil {
 		adminCommands = make(map[string]events.Event)
 		//adminCommands["exit"] = &events.Function{Name: "Admin!Exit", Function: func() { Shutdown <- true }}
-		adminCommands["add"] = &events.Function{Name: "Admin!Add", Function: makeAdminFunc(2,
+		adminCommands["add"] = &events.Function{Name: "Admin!Add", Function: MakeAdminFunc(2,
 			func(args ...string) { InsertUser(args[0], args[1]) })}
-		adminCommands["remove"] = &events.Function{Name: "Admin!Remove", Function: makeAdminFunc(1,
+		adminCommands["remove"] = &events.Function{Name: "Admin!Remove", Function: MakeAdminFunc(1,
 			func(args ...string) { DeleteUser(args[0]) })}
-		adminCommands["change"] = &events.Function{Name: "Admin!Change", Function: makeAdminFunc(3,
+		adminCommands["change"] = &events.Function{Name: "Admin!Change", Function: MakeAdminFunc(3,
 			func(args ...string) { ChangeUser(args[0], args[1], args[2]) })}
 	}
 }

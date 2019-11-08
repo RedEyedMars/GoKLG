@@ -178,6 +178,15 @@ func setupClientCommands(registry *ClientRegistry) {
 		databasing.SaveEmail(string(user), m[0], m[1])
 	}
 	commands["view"] = func(c *Client, msg []byte, user []byte) {}
+	commands["report"] = func(c *Client, msg []byte, user []byte) {
+		if user != nil {
+			response := <-databasing.RequestReport(string(user))
+			c.send <- []byte("{report_response}" + response)
+		} else {
+			response := <-databasing.RequestOctoberReport()
+			c.send <- []byte("{report_response}" + response)
+		}
+	}
 	setupLoginCommands(registry)
 }
 

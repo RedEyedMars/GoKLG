@@ -2,6 +2,7 @@ package databasing
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"time"
 )
@@ -46,6 +47,18 @@ func (mr *DBActivityResponse) close() {
 	close(mr.chl)
 }
 
+type DBReportResponse struct {
+	chl       chan string
+	assembler func(*sql.Rows) string
+}
+
+func (mr *DBReportResponse) send(result *sql.Rows) {
+	mr.chl <- mr.assembler(result)
+}
+func (mr *DBReportResponse) close() {
+	close(mr.chl)
+}
+
 func NewActivity(id int64, name string) *Activity {
 	newActivity := &Activity{
 		ID:   id,
@@ -79,6 +92,18 @@ func SetupActivities(db *sql.DB) {
 
 	defineQuery(db, "Activities_AddActivity", `INSERT INTO activity VALUES (NULL,?);`)
 	defineQuery(db, "Activities_LogActivity", `INSERT INTO user_activity VALUES (?,?,?);`)
+
+	defineQuery(db, "Activities_Report", `SELECT
+																					user.name as user_name,
+																					activity.name as activity_name,
+																					COUNT(occurrence) as amount,
+																					MIN(occurrence) as first_occurrence,
+																					MAX(occurrence) as last_occurrence
+																			  FROM user_activity
+																					INNER JOIN user ON user.id=user_id
+																					INNER JOIN activity ON activity.id=activity_id
+																				WHERE MONTH(occurrence)=?
+																				GROUP BY user.name,activity.name;`)
 }
 
 func RequestActivity(name string, args ...interface{}) <-chan *Activity {
@@ -127,6 +152,61 @@ func LogActivity(activityName string, userName string, ts time.Time) <-chan bool
 	}()
 	return response
 }
+func RequestOctoberReport() <-chan string {
+	return RequestReport("October")
+}
+func RequestReport(month string) <-chan string {
+	var month_i int64
+	switch month {
+	case "January":
+		month_i = 1
+	case "February":
+		month_i = 2
+	case "March":
+		month_i = 3
+	case "April":
+		month_i = 4
+	case "May":
+		month_i = 5
+	case "June":
+		month_i = 6
+	case "July":
+		month_i = 7
+	case "August":
+		month_i = 8
+	case "September":
+		month_i = 9
+	case "October":
+		month_i = 10
+	case "November":
+		month_i = 11
+	case "December":
+		month_i = 12
+	}
+
+	response2 := make(chan string, 1)
+	go func() {
+		response := make(chan string, 1)
+		queries <- &DBQueryResponse{
+			query: "Activities_Report",
+			args:  []interface{}{month_i},
+			sender: &DBReportResponse{
+				chl:       response,
+				assembler: parseReport,
+			},
+		}
+		ret := ""
+		ret = ret + fmt.Sprintln("____________________________________________________________________________________________________")
+		ret = ret + fmt.Sprintln("|\tuser_name\t|\tactivity_name\t|\tamount\t|\tfirst_occurrence\t|\tlast_occurrence\t|")
+		ret = ret + fmt.Sprintln("____________________________________________________________________________________________________")
+		for row := range response {
+			ret = ret + row
+		}
+		ret = ret + fmt.Sprintln("____________________________________________________________________________________________________")
+		response2 <- ret
+	}()
+	return response2
+}
 func parseActivity(rows *sql.Rows) *Activity {
 	var (
 		id   int64
@@ -136,4 +216,18 @@ func parseActivity(rows *sql.Rows) *Activity {
 		log.Fatalf(" databasing.activities.Parse: Error: %s", err)
 	}
 	return NewActivity(id, name)
+}
+
+func parseReport(rows *sql.Rows) string {
+	var (
+		username         string
+		activityname     string
+		amount           int64
+		first_occurrence time.Time
+		last_occurrence  time.Time
+	)
+	if err := rows.Scan(&username, &activityname, &amount, &first_occurrence, &last_occurrence); err != nil {
+		log.Fatalf(" databasing.activities.Parse: Error: %s", err)
+	}
+	return fmt.Sprintf("|\t%s\t|\t%s\t|\t%d\t|\t%s\t|\t%s\t|\n", username, activityname, amount, first_occurrence.Format("2006-01-02 15:04:05"), last_occurrence.Format("2006-01-02 15:04:05"))
 }

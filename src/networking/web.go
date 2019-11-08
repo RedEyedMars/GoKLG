@@ -74,7 +74,6 @@ func End() {
 
 func StartWebClient(toClose chan bool) {
 	Shutdown = toClose
-	SetupAdminCommands()
 	setupNetworkingRegex()
 	homeRaw, err := ioutil.ReadFile("src/www/home.html")
 	if err != nil {
@@ -85,6 +84,7 @@ func StartWebClient(toClose chan bool) {
 	flag.Parse()
 	registry := newRegistry()
 	go registry.run()
+	SetupAdminCommands(registry)
 
 	setupClientCommands(registry)
 
