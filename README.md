@@ -3,8 +3,8 @@
 
 ## By Geoffrey Guest
 
-[redeyedmars.com](http://www.redeyedmars.com/) - The website used to demonstrate the assessment answers
-[redeyedmars.com/report.html](http://www.redeyedmars.com/report.html) - The website used to demonstrate the assessment 3
+* [redeyedmars.com](http://www.redeyedmars.com/) - The website used to demonstrate the assessment answers
+* [redeyedmars.com/report.html](http://www.redeyedmars.com/report.html) - The website used to demonstrate the assessment 3
 
 ## Overview
 
@@ -27,7 +27,7 @@ A note about how the passwords are passed, this is the sequence:
 
 * Server-side - golang
 * Front-end - html/css/javascript
-** encryption - [sha256 using this javascript implementation](https://github.com/brillout/forge-sha256/)
+* encryption - [sha256 using this javascript implementation](https://github.com/brillout/forge-sha256/)
 * Database - mysql
 * Cloud - aws
 * Version Control - github.com
