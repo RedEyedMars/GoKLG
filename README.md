@@ -3,8 +3,8 @@
 
 ## By Geoffrey Guest
 
-* [redeyedmars.com](http://www.redeyedmars.com/) - The website used to demonstrate the assessment answers
-* [redeyedmars.com/report.html](http://www.redeyedmars.com/report.html) - The website used to demonstrate the assessment 3
+* [redeyedmars.com](http://redeyedmars.com/) - The website used to demonstrate the assessment answers
+* [redeyedmars.com/report.html](http://redeyedmars.com/report.html) - The website used to demonstrate the assessment 3
 
 ## Overview
 
@@ -49,7 +49,7 @@ The server is run using the following command: go run user_server.go
 
 ## Assessment 1
 
-API's for adding users can be seen at the front page of [redeyedmars.com](http://www.redeyedmars.com/)
+API's for adding users can be seen at the front page of [redeyedmars.com](http://redeyedmars.com/)
 
 Once on the site the user can change their username/password by clicking on their username in the top left.
 
@@ -65,7 +65,7 @@ All changes are recorded in the mysql backend.
 
 ## Assessment 2
 
-The main page of [redeyedmars.com](http://www.redeyedmars.com/) showcases a user login/signup page that then transitions to a barebones website
+The main page of [redeyedmars.com](http://redeyedmars.com/) showcases a user login/signup page that then transitions to a barebones website
 
 On the left is the navigation bar.
 
@@ -79,7 +79,7 @@ The user can also logout in the bottom left of the page.
 
 ## Assessment 3
 
-The side page of [redeyedmars.com/report.html](http://www.redeyedmars.com/report.html) can be viewed. Since data is being used from active users, and we are currently in the month of November no data is reported for October. However there is a drop down of the months that the user can select November in and the report will populate for November.
+The side page of [redeyedmars.com/report.html](http://redeyedmars.com/report.html) can be viewed. Since data is being used from active users, and we are currently in the month of November no data is reported for October. However there is a drop down of the months that the user can select November in and the report will populate for November.
 
 ## Bonus Challenge
 
