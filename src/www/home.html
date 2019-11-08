@@ -78,27 +78,37 @@ window.onload = function () {
 
   <div id="account_page" class="site_page">
     <h1>Account Information</h1>
-      <p> Change your username and password here: </p>
       <div id="account_change_status"></div>
       <div id="change_old_pwd_div">
-          Previous Password:
-          <input id="change_old_pass" onkeyup="checkPassword_('change_old_pass','change_old_password_status');" type="password"/>
-          <img id="change_old_password_status" src="Pending.png" class="name_status_img" alt="This img is to display the status of the password" title="Please enter a password"></img>
+        To change your account info, please enter your password then press "Change Account".
+        <br/>
+        Password:
+        <input id="change_old_pass" onkeyup="checkPassword_('change_old_pass','change_old_password_status');" type="password"/>
+        <img id="change_old_password_status" src="Pending.png" class="name_status_img" alt="This img is to display the status of the password" title="Please enter a password"></img>
+        <br/>
+        <span class="login_button" onclick="change_profile()">Change Account</span>
       </div>
 
       <div id="change_user_div">
         New Username:
         <input id="change_username" onkeyup="checkUsername_('change_username','change_username_status');" type="text"/>
         <img id="change_username_status" src="Pending.png" class="name_status_img" alt="This img is to display the status of the username" title="Please enter a username"></img>
+
+        <span class="login_button" onclick="change_user_name()">Change account</span>
       </div>
 
       <div id="change_pwd_div">
-          Password:
+          New Password:
           <input id="change_pass" onkeyup="checkPassword_('change_pass','change_password_status');" type="password"/>
           <img id="change_password_status" src="Pending.png" class="name_status_img" alt="This img is to display the status of the password" title="Please enter a password"></img>
+          <div>
+            Re-enter Password:
+            <input id="change_pass" onkeyup="checkPassword_('change_pass','change_password_status');" type="password"/>
+            <img id="change_password_status" src="Pending.png" class="name_status_img" alt="This img is to display the status of the password" title="Please enter a password"></img>
+          </div>
+          <span class="login_button" onclick="change_password()">Change account</span>
       </div>
       </br>
-      <span class="login_button" onclick="change_accounts()">Change account</span>
   </div>
 
   <div id="main_page" class="site_page">

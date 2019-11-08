@@ -60,20 +60,27 @@ func setupLoginCommands(registry *ClientRegistry) {
 		c.id = -1
 		c.send <- []byte("{logout_successful}")
 	}
-
-	commands["attempt_change"] = func(c *Client, msg []byte, user []byte) {
+	commands["request_change_permission"] = func(c *Client, msg []byte, user []byte) {
+		hash := sha256.New()
+		hash.Write([]byte(adminPassword))
+		hash.Write(msg)
+		pwdAsString := fmt.Sprintf("%x", hash.Sum(nil)[:])
+		if user := <-databasing.RequestUser("ByPwd", pwdAsString); user != nil {
+			c.send <- []byte(fmt.Sprintf("{change_request_granted:%s}", user.Name))
+			log.Printf(" networking.request_change_permission.Change granted")
+		} else {
+			c.send <- []byte("{change_request_denied}Credentials not accepted, either check your password!")
+			log.Printf(" networking.request_change_permission.Change Denied!")
+		}
+	}
+	commands["change_username"] = func(c *Client, msg []byte, user []byte) {
 		msgSplit := strings.Split(string(msg), ",")
-		newUser, oldPwd, pwd := msgSplit[0], msgSplit[1], msgSplit[2]
+		newUser, pwd := msgSplit[0], msgSplit[1]
 		hash := sha256.New()
 		hash.Write([]byte(adminPassword))
 		hash.Write([]byte(pwd))
 		pwdAsString := fmt.Sprintf("%x", hash.Sum(nil)[:])
-
-		hash = sha256.New()
-		hash.Write([]byte(adminPassword))
-		hash.Write([]byte(oldPwd))
-		oldPwdAsString := fmt.Sprintf("%x", hash.Sum(nil)[:])
-		if confirmed_user := <-databasing.RequestUser("ByPwd", oldPwdAsString); confirmed_user != nil {
+		if confirmed_user := <-databasing.RequestUser("ByPwd", pwdAsString); confirmed_user != nil {
 			if success := <-databasing.ChangeUser(string(user), newUser, pwdAsString); success {
 				c.name = newUser
 				c.send <- []byte(fmt.Sprintf("{change_successful:%s}", newUser))
@@ -83,8 +90,34 @@ func setupLoginCommands(registry *ClientRegistry) {
 				log.Printf(" networking.attempt_change.Change failed")
 			}
 		} else {
-			c.send <- []byte("{change_failed}No matching username was found for:" + string(user) + "!")
-			log.Printf(" networking.attempt_change.Change failed")
+			c.send <- []byte("{change_request_denied}Credentials not accepted, either check your current password!")
+			log.Printf(" networking.attempt_login.Login failed")
+		}
+	}
+	commands["change_password"] = func(c *Client, msg []byte, user []byte) {
+		msgSplit := strings.Split(string(msg), ",")
+		newPwd, oldPwd := msgSplit[0], msgSplit[1]
+		hash := sha256.New()
+		hash.Write([]byte(adminPassword))
+		hash.Write([]byte(newPwd))
+		newPwdAsString := fmt.Sprintf("%x", hash.Sum(nil)[:])
+
+		hash = sha256.New()
+		hash.Write([]byte(adminPassword))
+		hash.Write([]byte(oldPwd))
+		pwdAsString := fmt.Sprintf("%x", hash.Sum(nil)[:])
+		if confirmed_user := <-databasing.RequestUser("ByPwd", pwdAsString); confirmed_user != nil {
+			if success := <-databasing.ChangeUser(string(user), string(user), newPwdAsString); success {
+				c.name = string(user)
+				c.send <- []byte(fmt.Sprintf("{change_successful:%s}", string(user)))
+				log.Printf(" networking.attempt_change.Change successful")
+			} else {
+				c.send <- []byte("{change_failed}No matching username was found for:" + string(user) + "!")
+				log.Printf(" networking.attempt_change.Change failed")
+			}
+		} else {
+			c.send <- []byte("{change_request_denied}Credentials not accepted, either check your password!")
+			log.Printf(" networking.attempt_login.Login failed")
 		}
 	}
 }
