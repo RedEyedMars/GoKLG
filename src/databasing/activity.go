@@ -195,14 +195,13 @@ func RequestReport(month string) <-chan string {
 				assembler: parseReport,
 			},
 		}
-		ret := ""
-		ret = ret + fmt.Sprintln("____________________________________________________________________________________________________")
-		ret = ret + fmt.Sprintln("|\tuser_name\t|\tactivity_name\t|\tamount\t|\tfirst_occurrence\t|\tlast_occurrence\t|")
-		ret = ret + fmt.Sprintln("____________________________________________________________________________________________________")
+		ret := "____________________________________________________________________________________________________" +
+			"|\tuser_name\t|\tactivity_name\t|\tamount\t|\tfirst_occurrence\t|\tlast_occurrence\t|" +
+			"____________________________________________________________________________________________________"
 		for row := range response {
 			ret = ret + row
 		}
-		ret = ret + fmt.Sprintln("____________________________________________________________________________________________________")
+		ret = ret + "____________________________________________________________________________________________________"
 		response2 <- ret
 	}()
 	return response2

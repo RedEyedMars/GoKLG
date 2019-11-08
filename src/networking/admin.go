@@ -20,6 +20,11 @@ func SetupAdminCommands(registry *ClientRegistry) {
 				result := <-databasing.RequestReport(args[0])
 				fmt.Println(result)
 			})}
+		adminCommands["report_oct"] = &events.Function{Name: "Admin!Report", Function: databasing.MakeAdminFunc(0,
+			func(args ...string) {
+				result := <-databasing.RequestOctoberReport()
+				fmt.Println(result)
+			})}
 		/*adminCommands["addMember"] = &events.Function{Name: "Admin!AddMember", Function: func() {
 			if adminArgs != nil {
 				memberIp := adminArgs[0]
